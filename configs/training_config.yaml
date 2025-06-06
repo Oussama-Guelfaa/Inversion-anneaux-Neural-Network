@@ -1,0 +1,87 @@
+# Training Configuration for Neural Network Models
+# Author: Oussama GUELFAA
+# Date: 05 - 06 - 2025
+
+# Data Configuration
+data:
+  input_dim: 1000  # Number of radial points in intensity profiles
+  output_dim: 2    # Number of parameters to predict [L_ecran, gap]
+  train_test_split: 0.8
+  validation_split: 0.2
+  random_seed: 42
+
+# PyTorch Model Configuration
+pytorch:
+  model:
+    hidden_dims: [512, 256, 128, 64]
+    dropout_rate: 0.2
+    activation: "relu"
+    use_batch_norm: true
+    use_residual: true
+  
+  training:
+    batch_size: 32
+    learning_rate: 0.001
+    num_epochs: 200
+    early_stopping_patience: 20
+    weight_decay: 1e-5
+    gradient_clipping: 1.0
+  
+  optimizer:
+    type: "adam"
+    betas: [0.9, 0.999]
+    eps: 1e-8
+  
+  scheduler:
+    type: "cosine_annealing"
+    T_max: 50
+    eta_min: 1e-6
+
+# TensorFlow Model Configuration
+tensorflow:
+  model:
+    layers: [512, 256, 128, 64, 2]
+    dropout_rate: 0.2
+    activation: "relu"
+    use_batch_norm: true
+  
+  training:
+    batch_size: 32
+    learning_rate: 0.001
+    epochs: 500
+    early_stopping_patience: 30
+    validation_split: 0.2
+  
+  optimizer:
+    type: "adam"
+    beta_1: 0.9
+    beta_2: 0.999
+    epsilon: 1e-7
+  
+  callbacks:
+    reduce_lr_patience: 15
+    reduce_lr_factor: 0.7
+    min_lr: 1e-7
+
+# Performance Targets
+performance:
+  target_r2: 0.8
+  excellent_r2: 0.99
+  max_rmse: 0.01
+  convergence_threshold: 1e-6
+
+# File Paths
+paths:
+  data_dir: "data/processed"
+  models_dir: "models"
+  results_dir: "results"
+  logs_dir: "results/logs"
+  plots_dir: "results/plots"
+  reports_dir: "results/reports"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  save_logs: true
+  log_file: "results/logs/training.log"
