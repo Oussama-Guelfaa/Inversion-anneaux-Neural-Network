@@ -468,8 +468,6 @@ scaler_gap = joblib.load('models/ultra_scaler_gap.pkl')
 - **Méthodologie** applicable à d'autres problèmes similaires
 - **Base solide** pour futures améliorations
 
-### **Message clé :**
-**"Une approche méthodique de résolution de problèmes peut transformer des performances catastrophiques en résultats prometteurs. Chaque détail technique compte."**
 
 ---
 
