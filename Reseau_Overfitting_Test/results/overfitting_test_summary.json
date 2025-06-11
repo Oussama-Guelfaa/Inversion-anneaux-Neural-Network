@@ -1,0 +1,14 @@
+{
+  "test_type": "overfitting_validation",
+  "dataset": "dataset_small_particle",
+  "n_samples": 400,
+  "gap_range": "0.0050 - 2.0000 \u00b5m",
+  "model_architecture": "SimpleGapPredictor (512-256-128-1)",
+  "training_epochs": 200,
+  "final_train_loss": 9.008779834402958e-06,
+  "final_val_loss": 1.9254815951512684e-05,
+  "r2": 0.9999422352155848,
+  "mse": 1.9254807795113588e-05,
+  "mae": 0.003092215635906902,
+  "rmse": 0.004388030058592761
+}
