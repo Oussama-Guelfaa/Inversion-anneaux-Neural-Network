@@ -1,0 +1,98 @@
+# Configuration for Noise Robustness Testing
+# Author: Oussama GUELFAA
+# Date: 10 - 01 - 2025
+
+experiment:
+  name: "Noise_Robustness_Test"
+  description: "Comprehensive noise robustness testing with progressive noise levels"
+  
+noise_levels:
+  - 0.0    # 0% noise (baseline)
+  - 0.01   # 1% noise
+  - 0.02   # 2% noise
+  - 0.05   # 5% noise
+  - 0.10   # 10% noise
+  - 0.20   # 20% noise
+
+model:
+  name: "NoiseRobustCNN"
+  type: "1D_CNN_Simplified"
+  input_size: 600  # Truncated profiles
+  output_size: 1
+  
+architecture:
+  conv_layers:
+    - channels: 32
+      kernel_size: 5
+      stride: 2
+      padding: 2
+    - channels: 64
+      kernel_size: 3
+      stride: 2
+      padding: 1
+    - channels: 128
+      kernel_size: 3
+      stride: 2
+      padding: 1
+  
+  dense_layers:
+    - size: 128
+      dropout: 0.3
+    - size: 64
+      dropout: 0.2
+    - size: 1
+
+training:
+  batch_size: 16
+  epochs: 150
+  learning_rate: 0.0001
+  optimizer: "Adam"
+  loss_function: "MSE"
+  early_stopping:
+    patience: 25
+    min_delta: 0.0001
+  
+data_splits:
+  train: 0.6
+  validation: 0.2
+  test: 0.2
+  
+noise_application:
+  apply_to: "training_only"  # Only add noise to training data
+  distribution: "gaussian"
+  mean: 0.0
+  
+augmentation:
+  enable: true
+  interpolation_factor: 2  # Double dataset size through interpolation
+  
+evaluation:
+  performance_threshold: 0.8  # R² > 0.8 acceptable under noise
+  tolerance_gap: 0.01
+  
+paths:
+  data_file: "../data_generation/all_banque_new_24_01_25_NEW_full.mat"
+  models_dir: "models/"
+  plots_dir: "plots/"
+  results_dir: "results/"
+  
+visualization:
+  generate_plots: true
+  plot_types:
+    - "noise_robustness_analysis"
+    - "predictions_by_noise"
+    - "performance_degradation"
+    - "scatter_plots"
+    
+analysis:
+  local_generalization:
+    enable: true
+    gap_ranges:
+      - [0.025, 0.5]   # Small gaps
+      - [0.5, 1.0]     # Medium gaps
+      - [1.0, 1.5]     # Large gaps
+  
+  reduced_data_test:
+    enable: true
+    sample_sizes: [300, 500, 700]
+    noise_level: 0.05  # 5% noise for reduced data test
