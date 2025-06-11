@@ -1,0 +1,12 @@
+{
+  "test_info": {
+    "date": "10-01-2025",
+    "model_file": "model_noise_2percent.pth",
+    "data_file": "gap_0.0250um_L_10.000um.mat",
+    "model_noise_level": 2,
+    "model_metrics": {
+      "r2": 0.9770369461591286,
+      "mse": 0.008844116494271623,
+      "mae": 0.06357434700429439,
+      "rmse": 0.09404316293208997,
+      "predictions": 
