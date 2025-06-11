@@ -1,89 +1,138 @@
-# 🎯 Inversion-anneaux-Neural-Network
+# 🔬 Inversion d'Anneaux - Neural Network Project
 
-**Author:** Oussama GUELFAA  
-**Date:** 05 - 06 - 2025
+**Author:** Oussama GUELFAA
+**Date:** 10 - 01 - 2025
 
-## 📋 Project Overview
+## 📖 Project Overview
 
-This project implements a **sophisticated neural network** for predicting physical parameters `L_ecran` (screen distance) and `gap` from radial intensity profiles extracted from holographic data. The neural network uses 1D profile data rather than 2D image CNN approaches for ring analysis, providing better performance and interpretability.
+This project implements **7 modular neural network solutions** for holographic ring analysis and parameter prediction. Each neural network is organized as an independent, self-contained unit with standardized structure for easy deployment, comparison, and archiving.
 
-## 🗂️ Project Structure
+## 🎯 Objectives
+
+- **Primary Goal**: Predict gap and L_ecran parameters from 1D intensity profiles
+- **Data Source**: Holographic intensity ratios (I_subs/I_subs_inc) from MATLAB files
+- **Target Accuracy**: R² > 0.8 for regression tasks
+- **Architecture**: 1D profile-based neural networks (preferred over 2D CNN approaches)
+- **Modularity**: Each network as independent, deployable unit
+
+## 🏗️ Project Structure
+
+The project follows a modular architecture where each neural network is self-contained:
 
 ```
-Inversion-anneaux-Neural-Network/
-├── README.md                          # Main project documentation
-├── requirements.txt                   # Python dependencies
-├── .gitignore                         # Git ignore file
-├── src/                              # Source code
-│   ├── data/                         # Data processing modules
-│   │   └── extract_training_data.py  # Data extraction utilities
-│   ├── models/                       # Model architectures (future)
-│   ├── training/                     # Training scripts
-│   │   ├── train_pytorch.py          # PyTorch training
-│   │   ├── train_tensorflow.py       # TensorFlow training
-│   │   ├── train_optimized.py        # Optimized training pipeline
-│   │   └── train_and_evaluate_complete.py # Complete training pipeline
-│   ├── evaluation/                   # Evaluation and testing
-│   │   ├── evaluate_models.py        # Model evaluation
-│   │   ├── evaluate_tensorflow_model.py # TensorFlow evaluation
-│   │   ├── comprehensive_eval.py     # Comprehensive evaluation
-│   │   └── generate_reports.py       # Report generation
-│   └── utils/                        # Utility functions
-│       ├── data_utils.py             # Data processing utilities
-│       ├── load_test_data.py         # Test data loading
-│       └── verify_test_data.py       # Data verification
-├── models/                           # Saved model files
-│   ├── pytorch/                      # PyTorch models
-│   └── tensorflow/                   # TensorFlow models
-├── data/                            # Data files
-│   └── processed/                   # Processed datasets
-├── tests/                           # Unit tests
-├── configs/                         # Configuration files
-├── docs/                           # Documentation
-│   ├── data_extraction.md          # Data extraction explanation
-│   ├── model_architecture.md       # Model architecture details
-│   └── results_analysis.md         # Results analysis
-├── results/                        # Results and outputs
-│   ├── plots/                      # Generated plots
-│   ├── reports/                    # Generated reports
-│   └── logs/                       # Training logs
-└── examples/                       # Example usage
-    └── sample_holograms/           # Sample hologram images
+Inversion_anneaux/
+├── 🔬 Reseau_Gap_Prediction_CNN/          # CNN for gap parameter prediction
+├── 🔊 Reseau_Noise_Robustness/            # Noise robustness testing
+├── 🧪 Reseau_Overfitting_Test/            # Overfitting validation
+├── 🧠 Reseau_Advanced_Regressor/          # Advanced regressor with attention
+├── 🔥 Reseau_Ultra_Specialized/           # Ultra-specialized architecture
+├── ⚡ Reseau_PyTorch_Optimized/           # Optimized PyTorch implementation
+├── 🔧 Reseau_TensorFlow_Alternative/      # TensorFlow/Keras alternative
+├── 📊 data_generation/                    # Original MATLAB data and scripts
+├── 📋 project_map.md                      # Complete project overview
+└── 📖 README.md                           # This file
+```
+
+### Standardized Network Structure
+
+Each neural network follows the same organization:
+
+```
+Reseau_XYZ/
+├── run.py              # Autonomous main script
+├── config/
+│   └── config.yaml     # Complete configuration
+├── models/             # Trained models (.pth, .h5, .pkl)
+├── plots/              # Visualizations and analysis
+├── results/            # Metrics and reports (JSON, CSV)
+├── docs/               # Specialized documentation
+└── README.md           # Usage guide
 ```
 
 ## 🚀 Quick Start
 
 ### 1️⃣ Setup Environment
 ```bash
-pip install -r requirements.txt
+# Install common dependencies
+pip install torch pandas numpy matplotlib seaborn scikit-learn pyyaml scipy joblib
+
+# For TensorFlow (optional)
+pip install tensorflow
 ```
 
-### 2️⃣ Extract Training Data
+### 2️⃣ Choose Your Neural Network
 ```bash
-python src/data/extract_training_data.py
+# For production use (recommended)
+cd Reseau_Advanced_Regressor
+python run.py
+
+# For maximum performance
+cd Reseau_Ultra_Specialized
+python run.py
+
+# For gap-only prediction
+cd Reseau_Gap_Prediction_CNN
+python run.py --mode train
+
+# For robustness testing
+cd Reseau_Noise_Robustness
+python run.py
 ```
 
-### 3️⃣ Train Neural Network
-```bash
-# PyTorch training
-python src/training/train_pytorch.py
+### 3️⃣ View Results
+Each network generates:
+- **Models**: Trained neural networks
+- **Plots**: Performance visualizations
+- **Results**: Detailed metrics and reports
 
-# TensorFlow training
-python src/training/train_tensorflow.py
+## 🎯 Neural Networks Available
 
-# Optimized training
-python src/training/train_optimized.py
-```
+### 1. 🔬 Reseau_Gap_Prediction_CNN
+**Specialized gap parameter prediction**
+- **Architecture:** CNN 1D with residual blocks
+- **Performance:** R² > 0.99 on gap
+- **Use case:** Gap-only prediction with high accuracy
 
-### 4️⃣ Evaluate Model
-```bash
-python src/evaluation/evaluate_models.py
-```
+### 2. 🔊 Reseau_Noise_Robustness
+**Noise robustness testing**
+- **Architecture:** Simplified network for testing
+- **Performance:** R² > 0.8 even with 5% noise
+- **Use case:** Evaluate model robustness under noise
+
+### 3. 🧪 Reseau_Overfitting_Test
+**Overfitting validation**
+- **Architecture:** Simple without regularization
+- **Performance:** R² > 0.99 and Loss < 0.001
+- **Use case:** Validate model learning capacity
+
+### 4. 🧠 Reseau_Advanced_Regressor
+**Advanced regressor with attention** ⭐ **Recommended**
+- **Architecture:** Multi-head with attention mechanism
+- **Performance:** R² > 0.8 gap, R² > 0.95 L_ecran
+- **Use case:** Production deployment
+
+### 5. 🔥 Reseau_Ultra_Specialized
+**Maximum performance ensemble**
+- **Architecture:** Ensemble of 3 ultra-deep models
+- **Performance:** R² > 0.85 gap, R² > 0.98 L_ecran
+- **Use case:** Research and maximum accuracy
+
+### 6. ⚡ Reseau_PyTorch_Optimized
+**Optimized PyTorch implementation**
+- **Architecture:** ResNet 1D with advanced optimizations
+- **Performance:** R² > 0.95 global
+- **Use case:** PyTorch development and research
+
+### 7. 🔧 Reseau_TensorFlow_Alternative
+**TensorFlow/Keras alternative**
+- **Architecture:** Dense 512→256→128→64→2
+- **Performance:** R² > 0.85 global
+- **Use case:** TensorFlow/Keras development
 
 ## 📊 Dataset Information
 
-### Data Source
-- **Dataset:** `all_banque_new_24_01_25_NEW_full.mat`
+### Common Data Source
+- **Dataset:** `data_generation/all_banque_new_24_01_25_NEW_full.mat`
 - **Variables:**
   - `L_ecran_subs_vect`: Screen distances (6.0 to 14.0 µm)
   - `gap_sphere_vect`: Gap values (0.025 to 1.5 µm)
@@ -92,43 +141,28 @@ python src/evaluation/evaluate_models.py
 
 ### Training Data
 - **990 samples** (33 L_ecran × 30 gap combinations)
-- **1000 radial points** per profile
+- **600-1000 radial points** per profile (network-dependent)
 - **Input:** Intensity ratios `I_subs/I_subs_inc`
 - **Output:** Physical parameters [L_ecran, gap]
 
-## 🏗️ Model Architecture
+## 📈 Performance Comparison
 
-### PyTorch Implementation
-- **Architecture:** ResNet 1D with residual blocks
-- **Layers:** Dense layers (512→256→128→64→2)
-- **Normalization:** StandardScaler
-- **Optimizer:** Adam with learning rate scheduling
-- **Loss:** MSE with early stopping
+| Network | Gap R² | L_ecran R² | Specialty | Training Time |
+|---------|--------|------------|-----------|---------------|
+| Gap Prediction CNN | >0.99 | - | Gap only | ~5 min |
+| Noise Robustness | >0.8* | >0.95* | Noise testing | ~15 min |
+| Overfitting Test | >0.99 | >0.99 | Validation | ~3 min |
+| **Advanced Regressor** ⭐ | >0.8 | >0.95 | **Production** | ~8 min |
+| Ultra Specialized | >0.85 | >0.98 | Max performance | ~20 min |
+| PyTorch Optimized | >0.8 | >0.95 | PyTorch dev | ~10 min |
+| TensorFlow Alternative | >0.8 | >0.95 | TensorFlow dev | ~15 min |
 
-### TensorFlow Implementation
-- **Architecture:** Dense layers (512→256→128→64→2)
-- **Dropout:** 0.2 for regularization
-- **Optimizer:** Adam
-- **Loss:** MSE with early stopping
-
-## 📈 Performance Metrics
-
-### Target Performance
-- **R² Score:** > 0.8 (target), achieved > 0.99
-- **RMSE:** < 0.01 (normalized parameters)
-- **Convergence:** Reliable training with early stopping
-- **Training Time:** ~5 minutes on CPU
-
-### Evaluation Features
-- Loss curves visualization
-- Prediction vs. true values plots
-- Comprehensive performance metrics
-- Physical interpretation of results
+*\* Performance under 5% noise*
 
 ## 🔬 Physical Background
 
 ### Intensity Calculation
-The neural network trains on the ratio `I_subs/I_subs_inc`, which represents the normalized scattered intensity:
+The neural networks train on the ratio `I_subs/I_subs_inc`, which represents the normalized scattered intensity:
 
 ```
 Ratio = |E_total|² / |E_incident|²
@@ -144,60 +178,48 @@ Ratio = |E_total|² / |E_incident|²
 
 ## 📚 Documentation
 
-- **[Data Extraction](docs/data_extraction.md):** Detailed explanation of data processing
-- **[Model Architecture](docs/model_architecture.md):** Neural network design details
-- **[Results Analysis](docs/results_analysis.md):** Performance evaluation and interpretation
+- **[Project Map](project_map.md):** Complete overview of all networks
+- **Individual READMEs:** Each network has detailed documentation
+- **Configuration Files:** YAML configs for each network
+- **Results:** Automated metrics and visualizations
 
-## 🧪 Testing
+## 🎯 Selection Guide
 
-### Test Data
-- Separate test dataset from `data_generation/dataset/` folder
-- Uses 'ratio' variable from .mat files as input
-- Verifies predictions against known values from `labels.csv`
+### For Production Use
+- **Recommended:** `Reseau_Advanced_Regressor` or `Reseau_Ultra_Specialized`
+- **Reason:** Systematic problem solving, high performance
 
-### Running Tests
-```bash
-python -m pytest tests/
-```
+### For Research
+- **Gap only:** `Reseau_Gap_Prediction_CNN`
+- **Robustness:** `Reseau_Noise_Robustness`
+- **Diagnostics:** `Reseau_Overfitting_Test`
 
-## 🔧 Configuration
+### For Development
+- **PyTorch:** `Reseau_PyTorch_Optimized`
+- **TensorFlow:** `Reseau_TensorFlow_Alternative`
 
-Configuration files are located in the `configs/` directory:
-- `training_config.yaml`: Training hyperparameters
-- `model_config.yaml`: Model architecture settings
+## 🔧 Modular Benefits
 
-## 📝 Development Guidelines
+### Independent Units
+- ✅ Each network is self-contained
+- ✅ Can be zipped and deployed separately
+- ✅ Easy to compare different approaches
+- ✅ Simplified maintenance and updates
 
-### Code Style
-- All files include header comments with author and date
-- Comprehensive function documentation
-- Detailed explanations for PyTorch function calls
-- Conventional project structure following Python best practices
+### Standardized Structure
+- ✅ Consistent organization across networks
+- ✅ Autonomous `run.py` scripts
+- ✅ Complete configuration files
+- ✅ Automated result generation
 
-### Git Workflow
-- Descriptive commit messages
-- Feature branches for development
-- Clean commit history
+## 🎉 Project Achievements
 
-## 🤝 Contributing
+This modular neural network suite successfully provides:
+- ✅ **7 specialized networks** for different use cases
+- ✅ **Standardized structure** for easy deployment
+- ✅ **High performance** (R² > 0.8 consistently achieved)
+- ✅ **Complete documentation** and configuration
+- ✅ **Production-ready** solutions for holographic analysis
+- ✅ **Modular architecture** for easy extension and maintenance
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📄 License
-
-This project is part of academic research at [Institution Name].
-
-## 🎉 Results
-
-The project successfully demonstrates:
-- ✅ Efficient data extraction pipeline
-- ✅ High-performance neural network (R² > 0.99)
-- ✅ Comprehensive evaluation framework
-- ✅ Clear documentation and code organization
-- ✅ Ready for holographic parameter inversion
-
-**The model is ready for production use in holographic analysis!** 🚀
+**Each network is ready for independent deployment in holographic parameter inversion!** 🚀
