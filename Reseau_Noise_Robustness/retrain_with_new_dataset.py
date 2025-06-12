@@ -403,7 +403,7 @@ def train_model(X_train, y_train, X_val, y_val, noise_level=5):
         scheduler.step(val_loss)
 
         if (epoch + 1) % 20 == 0:
-            print(f"   Epoch {epoch+1:3d}: Train R²={train_r2:.4f}, Val R²={val_r2:.4f}")
+            print(f"   Epoch {epoch+1:3d}: Train R²={train_r2:.4f}, Val R²={val_r2:.4f}, LR={optimizer.param_groups[0]['lr']:.2e}")
 
         if early_stopping(val_loss, model):
             print(f"   ⏹️ Early stopping à l'époque {epoch+1}")
