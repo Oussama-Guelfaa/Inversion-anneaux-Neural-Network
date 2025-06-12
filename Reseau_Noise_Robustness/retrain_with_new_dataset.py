@@ -112,12 +112,19 @@ class RobustGapPredictor(nn.Module):
 def load_dataset_from_folder(dataset_path="../data_generation/dataset"):
     """
     Charge les données depuis le dossier dataset fusionné.
-    
+
+    Cette fonction lit le fichier labels.csv pour obtenir les métadonnées,
+    puis charge chaque fichier .mat correspondant pour extraire les profils
+    d'intensité (variable 'ratio'). Les profils sont normalisés à 600 points.
+
     Args:
-        dataset_path (str): Chemin vers le dossier dataset
-        
+        dataset_path (str): Chemin vers le dossier dataset contenant labels.csv
+                           et les fichiers .mat individuels
+
     Returns:
-        tuple: (intensity_profiles, gap_values)
+        tuple: (intensity_profiles, gap_values) où:
+               - intensity_profiles: array (n_samples, 600) des profils
+               - gap_values: array (n_samples,) des valeurs de gap en µm
     """
     print("🔄 Chargement des données depuis le dataset fusionné...")
     
