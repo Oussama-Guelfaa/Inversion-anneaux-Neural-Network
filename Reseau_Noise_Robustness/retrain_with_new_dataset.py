@@ -235,6 +235,8 @@ def augment_data_by_interpolation(X, y, factor=2):
     y_final = np.concatenate(y_augmented, axis=0)
     
     print(f"✅ Augmentation terminée: {len(X)} → {len(X_final)} échantillons")
+    print(f"   Facteur d'augmentation réalisé: {len(X_final)/len(X):.2f}x")
+    print(f"   Échantillons interpolés générés: {len(X_final) - len(X)}")
     
     return X_final, y_final
 
