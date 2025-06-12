@@ -675,6 +675,8 @@ def main():
     print(f"   R² Score: {metrics['r2']:.4f}")
     print(f"   RMSE: {metrics['rmse']:.4f} µm")
     print(f"   MAE: {metrics['mae']:.4f} µm")
+    print(f"   Temps d'entraînement: {training_time:.1f}s")
+    print(f"   Échantillons de test: {len(y_test)}")
 
     print(f"\n📈 PERFORMANCE PAR PLAGE:")
     for range_name, range_metrics in metrics['range_metrics'].items():
