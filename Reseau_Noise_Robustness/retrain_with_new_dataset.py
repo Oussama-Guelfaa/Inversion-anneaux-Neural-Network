@@ -252,6 +252,7 @@ def add_gaussian_noise(X, noise_level_percent=5):
     X_noisy = X + noise
     
     print(f"🔊 Bruit {noise_level_percent}% ajouté - SNR moyen: {1/(noise_level_percent/100):.1f}")
+    print(f"   Écart-type du bruit: {np.mean(noise_std):.6f}")
     
     return X_noisy
 
