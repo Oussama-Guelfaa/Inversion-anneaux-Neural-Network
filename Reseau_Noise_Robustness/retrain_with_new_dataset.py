@@ -132,7 +132,8 @@ def load_dataset_from_folder(dataset_path="../data_generation/dataset"):
     labels_path = dataset_path / "labels.csv"
     
     if not labels_path.exists():
-        print(f"❌ Fichier labels.csv non trouvé dans {dataset_path}")
+        print(f"❌ Erreur: Fichier labels.csv non trouvé dans {dataset_path}")
+        print(f"   Vérifiez que le chemin est correct et que le fichier existe")
         return None, None
     
     # Charger les métadonnées
