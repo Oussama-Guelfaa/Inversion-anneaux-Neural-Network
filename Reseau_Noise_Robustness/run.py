@@ -2,7 +2,7 @@
 """
 Noise Robustness Test - Autonomous Testing Script
 Author: Oussama GUELFAA
-Date: 10 - 01 - 2025
+Date: 11 - 06 - 2025
 
 Script autonome pour tester la robustesse au bruit du réseau de neurones.
 Ce script évalue la performance du modèle face à différents niveaux de bruit gaussien
