@@ -185,6 +185,8 @@ def load_dataset_from_folder(dataset_path="../data_generation/dataset"):
     print(f"✅ {len(intensity_profiles)} échantillons chargés avec succès")
     print(f"   Forme des profils: {intensity_profiles.shape}")
     print(f"   Plage de gap: {gap_values.min():.3f} à {gap_values.max():.3f} µm")
+    print(f"   Valeurs manquantes: {np.isnan(intensity_profiles).sum()} points")
+    print(f"   Profils valides: {len(intensity_profiles)} / {len(labels_df)} fichiers")
     
     return intensity_profiles, gap_values
 
