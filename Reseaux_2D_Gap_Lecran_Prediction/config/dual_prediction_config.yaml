@@ -67,11 +67,11 @@ data_processing:
     method: "linear"    # Interpolation linéaire
     include_original: true
   
-  # Splits des données
+  # Splits des données (conforme aux bonnes pratiques)
   data_splits:
-    train: 0.70
-    validation: 0.15
-    test: 0.15
+    train: 0.64      # 80% × 0.8 = 64% du total
+    validation: 0.16  # 80% × 0.2 = 16% du total
+    test: 0.20       # 20% du total (totalement disjoint)
   
   # Preprocessing
   normalization:

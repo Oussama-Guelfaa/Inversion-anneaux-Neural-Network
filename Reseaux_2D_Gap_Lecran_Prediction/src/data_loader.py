@@ -118,7 +118,7 @@ class DualDataLoader:
         
         return X_augmented, y_augmented
     
-    def prepare_data_splits(self, X, y, train_size=0.70, val_size=0.15, test_size=0.15, 
+    def prepare_data_splits(self, X, y, train_size=0.64, val_size=0.16, test_size=0.20,
                            random_state=42):
         """
         Divise les données en train/validation/test.
@@ -298,9 +298,9 @@ class DualDataLoader:
         splits_config = config.get('data_processing', {}).get('data_splits', {})
         X_train, X_val, X_test, y_train, y_val, y_test = self.prepare_data_splits(
             X_augmented, y_augmented,
-            train_size=splits_config.get('train', 0.70),
-            val_size=splits_config.get('validation', 0.15),
-            test_size=splits_config.get('test', 0.15)
+            train_size=splits_config.get('train', 0.64),
+            val_size=splits_config.get('validation', 0.16),
+            test_size=splits_config.get('test', 0.20)
         )
         
         # 3. Normaliser les données
