@@ -1,0 +1,162 @@
+# Configuration for Dual Gap + L_ecran Prediction
+# Author: Oussama GUELFAA
+# Date: 06 - 01 - 2025
+
+experiment:
+  name: "Dual_Gap_Lecran_Prediction"
+  description: "Joint prediction of gap and L_ecran parameters from holographic intensity profiles"
+  version: "1.0"
+  
+model:
+  name: "DualParameterPredictor"
+  type: "Dense_Network_Dual_Output"
+  input_size: 600  # Truncated profiles for stability
+  output_size: 2   # [gap, L_ecran]
+  
+architecture:
+  # Architecture inspirée du modèle robuste gap-only
+  dense_layers:
+    - size: 512
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.2
+    - size: 256
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.2
+    - size: 128
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.2
+    - size: 64
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.1
+    - size: 2
+      activation: "linear"  # Sortie linéaire pour régression
+
+training:
+  batch_size: 32
+  epochs: 200
+  learning_rate: 0.001
+  optimizer: "Adam"
+  weight_decay: 1e-4
+  loss_function: "MSE"
+  
+  # Early stopping adapté pour dual output
+  early_stopping:
+    patience: 30
+    min_delta: 0.0001
+    monitor: "val_loss"
+    restore_best_weights: true
+  
+  # Learning rate scheduler
+  scheduler:
+    type: "ReduceLROnPlateau"
+    mode: "min"
+    factor: 0.5
+    patience: 15
+    min_lr: 1e-6
+
+data_processing:
+  # Data augmentation par interpolation 2D
+  augmentation:
+    enable: true
+    gap_density: 2      # Doubler la densité gap
+    L_ecran_density: 2  # Doubler la densité L_ecran
+    method: "linear"    # Interpolation linéaire
+    include_original: true
+  
+  # Splits des données
+  data_splits:
+    train: 0.70
+    validation: 0.15
+    test: 0.15
+  
+  # Preprocessing
+  normalization:
+    input_scaler: "StandardScaler"
+    target_scaling:
+      gap_scaler: "StandardScaler"
+      L_ecran_scaler: "StandardScaler"
+      separate_scaling: true  # Scaling séparé pour chaque paramètre
+  
+  # Troncature pour éviter divergence
+  profile_truncation: 600
+
+evaluation:
+  # Critères de succès
+  performance_targets:
+    gap_accuracy: 0.90      # > 90% accuracy pour gap
+    L_ecran_accuracy: 0.90  # > 90% accuracy pour L_ecran
+    combined_r2: 0.80       # R² > 0.8 pour les deux paramètres
+  
+  # Tolérance pour évaluation accuracy
+  tolerance:
+    gap_tolerance: 0.01     # ±0.01 µm pour gap
+    L_ecran_tolerance: 0.1  # ±0.1 µm pour L_ecran
+  
+  # Métriques à calculer
+  metrics:
+    - "r2_score"
+    - "mean_absolute_error"
+    - "mean_squared_error"
+    - "accuracy_within_tolerance"
+
+robustness:
+  # Test de robustesse au bruit
+  noise_testing:
+    enable: true
+    noise_levels: [0.0, 0.01, 0.02, 0.05, 0.10]  # 0%, 1%, 2%, 5%, 10%
+    apply_to: "training_only"
+    distribution: "gaussian"
+  
+  # Validation croisée
+  cross_validation:
+    enable: false  # Désactivé pour l'instant (dataset suffisant)
+    folds: 5
+
+paths:
+  # Chemins des données
+  dataset_path: "data_generation/dataset_2D"
+  augmented_data_cache: "data/augmented_dataset.npz"
+  
+  # Chemins de sortie
+  models_dir: "models/"
+  plots_dir: "plots/"
+  results_dir: "results/"
+  logs_dir: "logs/"
+
+visualization:
+  # Graphiques à générer
+  plots:
+    - "training_curves"
+    - "scatter_predictions_gap"
+    - "scatter_predictions_L_ecran"
+    - "residuals_analysis"
+    - "parameter_correlation"
+    - "noise_robustness"
+  
+  # Configuration des graphiques
+  figure_size: [12, 8]
+  dpi: 300
+  style: "seaborn"
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/training.log"
+
+# Paramètres spécifiques au dual output
+dual_output:
+  # Pondération des losses
+  loss_weights:
+    gap_weight: 1.0
+    L_ecran_weight: 1.0
+    adaptive_weighting: false  # Ajustement automatique des poids
+  
+  # Métriques séparées
+  separate_metrics: true
+  
+  # Validation séparée des paramètres
+  individual_validation: true

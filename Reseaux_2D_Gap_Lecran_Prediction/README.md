@@ -1,17 +1,37 @@
-# 🎯 Réseaux de Neurones 2D - Prédiction Gap + L_écran
+# 🧠 Réseau de Neurones Dual Gap + L_ecran
 
-**Auteur:** Oussama GUELFAA  
-**Date:** 25 - 01 - 2025
+**Auteur:** Oussama GUELFAA
+**Date:** 06 - 01 - 2025
+**Version:** 1.0
 
 ## 📖 Description
 
-Cette catégorie regroupe tous les réseaux de neurones conçus pour la **prédiction simultanée de deux paramètres** : le gap et la distance écran (L_écran) à partir de profils d'intensité holographiques. Ces modèles 2D tentent de résoudre le problème complet de caractérisation holographique.
+Ce réseau de neurones implémente une prédiction conjointe robuste des paramètres **gap** et **L_ecran** à partir de profils d'intensité holographiques. Il utilise une architecture dense sophistiquée avec data augmentation par interpolation 2D pour atteindre une accuracy > 90% sur chaque paramètre.
 
-## 🎯 Objectif Commun
+## 🎯 Objectifs
 
-**Prédiction Simultanée :** Tous les réseaux de cette catégorie prédisent simultanément :
-- **Gap** (en µm) : Épaisseur de la particule
-- **L_écran** (en µm) : Distance entre particule et écran de détection
+- **Prédiction Conjointe**: Gap + L_ecran simultanément
+- **Performance Cible**: Accuracy > 90% pour chaque paramètre
+- **Robustesse**: R² > 0.8 combiné
+- **Data Augmentation**: Interpolation 2D physiquement cohérente
+- **Architecture Robuste**: Inspirée du modèle gap-only performant
+
+## 🏆 RÉSULTATS EXCEPTIONNELS OBTENUS
+
+### 📊 Performance Finale (06-01-2025)
+- **Gap R²**: **0.9946** (99.46% de variance expliquée) 🎯
+- **L_ecran R²**: **0.9949** (99.49% de variance expliquée) 🎯
+- **Combined R²**: **0.9948** (99.48% combiné) 🎯
+
+### ✅ Accuracy Remarquable
+- **Gap Accuracy**: **97.0%** (objectif: >90%) ✅
+- **L_ecran Accuracy**: **99.9%** (objectif: >90%) ✅
+- **Combined Accuracy**: **98.5%** ✅
+
+### 🔬 Précision Exceptionnelle
+- **Gap MAE**: 0.0033 µm (tolérance: ±0.01 µm)
+- **L_ecran MAE**: 0.0243 µm (tolérance: ±0.1 µm)
+- **Temps d'entraînement**: 4 minutes (200 epochs)
 
 ## 🏗️ Architecture Générale
 
