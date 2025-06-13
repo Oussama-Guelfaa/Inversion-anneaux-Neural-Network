@@ -1,0 +1,57 @@
+================================================================================
+RAPPORT D'ANALYSE DU DATASET 2D D'ANNEAUX HOLOGRAPHIQUES
+================================================================================
+Auteur: Oussama GUELFAA
+Date: 13-06-2025
+Dataset analysé: data_generation/dataset_2D
+================================================================================
+
+1. STATISTIQUES GÉNÉRALES
+----------------------------------------
+Nombre total de fichiers: 2440
+Nombre de gaps uniques: 40
+Nombre de L_ecran uniques: 61
+Taille totale du dataset: 30.89 MB
+Taille moyenne par fichier: 0.01 MB
+
+2. PLAGES DES PARAMÈTRES
+----------------------------------------
+Gap minimum: 0.0050 µm
+Gap maximum: 0.2000 µm
+Nombre de gaps: 40
+L_ecran minimum: 10.000 µm
+L_ecran maximum: 11.500 µm
+Nombre de L_ecran: 61
+
+3. COMPLÉTUDE DU DATASET
+----------------------------------------
+Combinaisons attendues: 2440
+Combinaisons présentes: 2440
+Complétude: 100.0%
+✅ Dataset complet
+
+4. QUALITÉ DES DONNÉES
+----------------------------------------
+Ratio d'intensité moyen: 1.0086
+Écart-type moyen: 0.1343
+Valeur minimale globale: 0.7132
+Valeur maximale globale: 1.2658
+
+5. RECOMMANDATIONS
+----------------------------------------
+✅ Dataset très bien structuré et complet
+
+Pour l'entraînement de réseaux de neurones:
+- Nombre total d'échantillons: 2440
+- Recommandation train/val/test: 1708/366/366
+- Espace des paramètres bien couvert: Oui
+
+6. FICHIERS GÉNÉRÉS
+----------------------------------------
+- parameter_distributions.png: Distributions des paramètres
+- parameter_density_2D.png: Densité 2D des paramètres
+- coverage_matrix.png: Matrice de couverture
+- ring_samples_grid.png: Grille d'échantillons d'anneaux
+- rings_by_L_ecran.png: Évolution par L_ecran
+- dataset_statistics.csv: Statistiques détaillées
+- detailed_statistics.csv: Statistiques par variable
