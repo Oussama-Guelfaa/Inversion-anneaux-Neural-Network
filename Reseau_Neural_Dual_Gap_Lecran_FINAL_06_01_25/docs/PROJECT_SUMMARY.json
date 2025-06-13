@@ -1,0 +1,45 @@
+{
+  "project_name": "R\u00e9seau Dual Gap + L_ecran",
+  "author": "Oussama GUELFAA",
+  "date": "06-01-2025",
+  "status": "SUCCESS",
+  "description": "R\u00e9seau de neurones pour pr\u00e9diction conjointe gap + L_ecran avec performance exceptionnelle",
+  "results": {
+    "gap_r2": 0.9946,
+    "L_ecran_r2": 0.9949,
+    "combined_r2": 0.9948,
+    "gap_accuracy": 0.97,
+    "L_ecran_accuracy": 0.999,
+    "combined_accuracy": 0.985,
+    "training_time_minutes": 4.2,
+    "epochs": 200
+  },
+  "innovations": [
+    "Data augmentation 2D par interpolation physiquement coh\u00e9rente",
+    "Architecture dual avec normalisation s\u00e9par\u00e9e",
+    "Loss pond\u00e9r\u00e9e \u00e9quilibr\u00e9e",
+    "Facteur d'augmentation 5x (2440 \u2192 12200 \u00e9chantillons)"
+  ],
+  "files": {
+    "main_script": "run.py",
+    "demo_script": "demo.py",
+    "model_file": "models/dual_parameter_model.pth",
+    "results_file": "results/complete_results.json",
+    "config_file": "config/dual_prediction_config.yaml",
+    "plots": [
+      "plots/training_curves.png",
+      "plots/test_predictions_scatter.png"
+    ]
+  },
+  "performance_comparison": {
+    "objectives": {
+      "gap_accuracy_target": ">90%",
+      "gap_accuracy_achieved": "97.0%",
+      "L_ecran_accuracy_target": ">90%",
+      "L_ecran_accuracy_achieved": "99.9%",
+      "combined_r2_target": ">0.8",
+      "combined_r2_achieved": "0.9948"
+    },
+    "all_objectives_met": true
+  }
+}
