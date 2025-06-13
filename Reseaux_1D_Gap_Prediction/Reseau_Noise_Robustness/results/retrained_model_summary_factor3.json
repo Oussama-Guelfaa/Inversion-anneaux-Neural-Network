@@ -1,0 +1,29 @@
+{
+  "model_type": "RobustGapPredictor_Retrained",
+  "dataset": "dataset_merged (0.005-3.000\u00b5m)",
+  "augmentation": "interpolation_factor_3",
+  "noise_level": "5%",
+  "training_time_s": 23.81777286529541,
+  "performance": {
+    "r2_score": 0.994829189887337,
+    "rmse_um": 0.06197150392108367,
+    "mae_um": 0.043776024861882146
+  },
+  "range_performance": {
+    "0.0-1.0\u00b5m": {
+      "r2": 0.9939255394667759,
+      "rmse": 0.022240805072879937,
+      "n_samples": 119
+    },
+    "1.0-2.0\u00b5m": {
+      "r2": 0.9899355828477207,
+      "rmse": 0.028577102814915795,
+      "n_samples": 117
+    },
+    "2.0-3.0\u00b5m": {
+      "r2": 0.886796354833935,
+      "rmse": 0.0984516645112631,
+      "n_samples": 123
+    }
+  }
+}
