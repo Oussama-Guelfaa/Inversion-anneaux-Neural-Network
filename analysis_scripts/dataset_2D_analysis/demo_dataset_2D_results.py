@@ -22,7 +22,7 @@ def display_key_results():
     print("="*60)
     
     # Vérifier que l'analyse a été effectuée
-    output_path = Path("analysis_scripts/outputs_analysis_2D")
+    output_path = Path("analysis_scripts/dataset_2D_analysis/outputs_analysis_2D")
     
     if not output_path.exists():
         print("❌ L'analyse n'a pas encore été effectuée.")

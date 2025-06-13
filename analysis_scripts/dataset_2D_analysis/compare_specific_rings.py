@@ -35,7 +35,7 @@ class SpecificRingsComparator:
             dataset_path (str): Chemin vers le dossier dataset_2D
         """
         self.dataset_path = Path(dataset_path)
-        self.output_path = Path("analysis_scripts/outputs_analysis_2D/visualizations")
+        self.output_path = Path("analysis_scripts/dataset_2D_analysis/outputs_analysis_2D/visualizations")
         
         # Créer le dossier de sortie
         self.output_path.mkdir(parents=True, exist_ok=True)

@@ -24,7 +24,7 @@ def run_script(script_name, description):
     print(f"\n🚀 {description}")
     print("="*60)
     
-    script_path = Path("analysis_scripts") / script_name
+    script_path = Path("analysis_scripts/dataset_2D_analysis") / script_name
     
     if not script_path.exists():
         print(f"❌ Script non trouvé: {script_path}")
@@ -33,10 +33,12 @@ def run_script(script_name, description):
     try:
         start_time = time.time()
         
-        # Exécuter le script
+        # Exécuter le script depuis le répertoire racine
+        import os
+        root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
         result = subprocess.run([
             sys.executable, str(script_path)
-        ], capture_output=True, text=True, cwd=".")
+        ], capture_output=True, text=True, cwd=root_dir)
         
         end_time = time.time()
         duration = end_time - start_time

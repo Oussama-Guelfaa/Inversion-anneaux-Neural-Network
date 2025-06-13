@@ -10,6 +10,7 @@ choisis par l'utilisateur.
 """
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.io import loadmat
@@ -32,7 +33,7 @@ class InteractiveRingsComparator:
         Initialise le comparateur interactif.
         """
         self.dataset_path = Path(dataset_path)
-        self.output_path = Path("analysis_scripts/outputs_analysis_2D/visualizations")
+        self.output_path = Path("analysis_scripts/dataset_2D_analysis/outputs_analysis_2D/visualizations")
         self.available_gaps = []
         self.available_L_ecrans = []
         
@@ -377,8 +378,7 @@ def main():
         print(f"❌ Erreur: Le dossier {dataset_path} n'existe pas.")
         return
     
-    # Importer pandas pour le timestamp
-    import pandas as pd
+
     
     # Créer le comparateur et lancer la session
     comparator = InteractiveRingsComparator(dataset_path)

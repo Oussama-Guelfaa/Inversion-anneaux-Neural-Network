@@ -2,7 +2,7 @@
 RAPPORT D'ANALYSE DU DATASET 2D D'ANNEAUX HOLOGRAPHIQUES
 ================================================================================
 Auteur: Oussama GUELFAA
-Date: 13-06-2025
+Date: 06-01-2025
 Dataset analysé: data_generation/dataset_2D
 ================================================================================
 
