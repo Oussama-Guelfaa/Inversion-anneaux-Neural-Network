@@ -1,37 +1,46 @@
 # 🔬 Inversion d'Anneaux - Neural Network Project
 
-**Author:** Oussama GUELFAA
-**Date:** 10 - 01 - 2025
+**Auteur:** Oussama GUELFAA
+**Date:** 25 - 01 - 2025
 
-## 📖 Project Overview
+## 📖 Vue d'Ensemble du Projet
 
-This project implements **7 modular neural network solutions** for holographic ring analysis and parameter prediction. Each neural network is organized as an independent, self-contained unit with standardized structure for easy deployment, comparison, and archiving.
+Ce projet implémente des **solutions de réseaux de neurones spécialisées** pour l'analyse holographique d'anneaux et la prédiction de paramètres. Le projet est organisé en **deux catégories principales** selon le type de prédiction : 1D (gap seul) et 2D (gap + L_écran).
 
-## 🎯 Objectives
+## 🎯 Objectifs
 
-- **Primary Goal**: Predict gap and L_ecran parameters from 1D intensity profiles
-- **Data Source**: Holographic intensity ratios (I_subs/I_subs_inc) from MATLAB files
-- **Target Accuracy**: R² > 0.8 for regression tasks
-- **Architecture**: 1D profile-based neural networks (preferred over 2D CNN approaches)
-- **Modularity**: Each network as independent, deployable unit
+- **Objectif Principal**: Prédire les paramètres gap et/ou L_écran à partir de profils d'intensité 1D
+- **Source de Données**: Ratios d'intensité holographiques (I_subs/I_subs_inc) depuis fichiers MATLAB
+- **Précision Cible**: R² > 0.8 pour les tâches de régression (R² > 0.95 atteint)
+- **Architecture**: Réseaux basés sur profils 1D (préférés aux approches CNN 2D)
+- **Modularité**: Chaque réseau comme unité indépendante et déployable
 
-## 🏗️ Project Structure
+## 🏗️ Architecture du Projet
 
-The project follows a modular architecture where each neural network is self-contained:
+Le projet suit une architecture modulaire organisée par **type de prédiction** :
 
 ```
 Inversion_anneaux/
-├── 🔬 Reseau_Gap_Prediction_CNN/          # CNN for gap parameter prediction
-├── 🔊 Reseau_Noise_Robustness/            # Noise robustness testing
-├── 🧪 Reseau_Overfitting_Test/            # Overfitting validation
-├── 🧠 Reseau_Advanced_Regressor/          # Advanced regressor with attention
-├── 🔥 Reseau_Ultra_Specialized/           # Ultra-specialized architecture
-├── ⚡ Reseau_PyTorch_Optimized/           # Optimized PyTorch implementation
-├── 🔧 Reseau_TensorFlow_Alternative/      # TensorFlow/Keras alternative
-├── 📊 data_generation/                    # Original MATLAB data and scripts
-├── 📋 project_map.md                      # Complete project overview
-└── 📖 README.md                           # This file
+├── 🎯 Reseaux_1D_Gap_Prediction/          # Réseaux prédiction gap seul
+│   ├── 🔊 Reseau_Noise_Robustness/        # ⭐ Robustesse bruit (RECOMMANDÉ)
+│   ├── 🔬 Reseau_Gap_Prediction_CNN/      # CNN pour prédiction gap
+│   └── 🧪 Reseau_Overfitting_Test/        # Test validation overfitting
+├── 🎯 Reseaux_2D_Gap_Lecran_Prediction/   # Réseaux prédiction gap + L_écran
+│   ├── 🔧 Reseau_TensorFlow_Alternative/  # Alternative TensorFlow/Keras
+│   └── 🔥 Reseau_Ultra_Specialized/       # Architecture ultra-spécialisée
+├── 📊 data_generation/                    # Données MATLAB et scripts
+├── 🗂️ archive_legacy_networks/           # Archives réseaux précédents
+├── 🔧 utilities/                          # Utilitaires et outils communs
+├── 📋 analysis_scripts/                   # Scripts d'analyse
+└── 📖 README.md                           # Ce fichier
 ```
+
+### 🏆 Résultat Majeur : Succès des Réseaux 1D
+
+**Découverte clé :** Les réseaux 1D (prédiction gap seul) surpassent largement les réseaux 2D (gap + L_écran) :
+- **Performance 1D** : R² = 0.9948 (quasi-parfait)
+- **Performance 2D** : R² < 0.5 (problématique)
+- **Recommandation** : Utiliser exclusivement les réseaux 1D
 
 ### Standardized Network Structure
 
@@ -85,49 +94,44 @@ Each network generates:
 - **Plots**: Performance visualizations
 - **Results**: Detailed metrics and reports
 
-## 🎯 Neural Networks Available
+## 🎯 Réseaux de Neurones Disponibles
 
-### 1. 🔬 Reseau_Gap_Prediction_CNN
-**Specialized gap parameter prediction**
-- **Architecture:** CNN 1D with residual blocks
-- **Performance:** R² > 0.99 on gap
-- **Use case:** Gap-only prediction with high accuracy
+### 🏆 Catégorie 1D - Prédiction Gap Seul (RECOMMANDÉE)
 
-### 2. 🔊 Reseau_Noise_Robustness
-**Noise robustness testing**
-- **Architecture:** Simplified network for testing
-- **Performance:** R² > 0.8 even with 5% noise
-- **Use case:** Evaluate model robustness under noise
+#### 1. 🔊 Reseau_Noise_Robustness ⭐ **MEILLEUR MODÈLE**
+**Robustesse au bruit avec augmentation de données optimisée**
+- **Architecture:** Dense 512→256→128→1 avec régularisation
+- **Performance:** R² = **0.9948** (quasi-parfait)
+- **Innovation:** Augmentation par interpolation facteur 3
+- **Zone critique:** [1.75-2.00 µm] maîtrisée (R² = 0.99)
+- **Robustesse:** Testé jusqu'à 20% bruit, optimal à 5%
+- **Utilisation:** **Production immédiate recommandée**
 
-### 3. 🧪 Reseau_Overfitting_Test
-**Overfitting validation**
-- **Architecture:** Simple without regularization
-- **Performance:** R² > 0.99 and Loss < 0.001
-- **Use case:** Validate model learning capacity
+#### 2. 🔬 Reseau_Gap_Prediction_CNN
+**CNN spécialisé pour prédiction gap**
+- **Architecture:** CNN 1D avec blocs résiduels
+- **Performance:** R² > 0.90 sur gap
+- **Utilisation:** Exploration architectures convolutionnelles
 
-### 4. 🧠 Reseau_Advanced_Regressor
-**Advanced regressor with attention** ⭐ **Recommended**
-- **Architecture:** Multi-head with attention mechanism
-- **Performance:** R² > 0.8 gap, R² > 0.95 L_ecran
-- **Use case:** Production deployment
+#### 3. 🧪 Reseau_Overfitting_Test
+**Validation capacité d'apprentissage**
+- **Architecture:** Simple sans régularisation
+- **Performance:** R² ≈ 1.0 sur données d'entraînement
+- **Utilisation:** Tests de validation et diagnostics
 
-### 5. 🔥 Reseau_Ultra_Specialized
-**Maximum performance ensemble**
-- **Architecture:** Ensemble of 3 ultra-deep models
-- **Performance:** R² > 0.85 gap, R² > 0.98 L_ecran
-- **Use case:** Research and maximum accuracy
+### ⚠️ Catégorie 2D - Prédiction Gap + L_écran (RECHERCHE)
 
-### 6. ⚡ Reseau_PyTorch_Optimized
-**Optimized PyTorch implementation**
-- **Architecture:** ResNet 1D with advanced optimizations
-- **Performance:** R² > 0.95 global
-- **Use case:** PyTorch development and research
-
-### 7. 🔧 Reseau_TensorFlow_Alternative
-**TensorFlow/Keras alternative**
+#### 4. 🔧 Reseau_TensorFlow_Alternative
+**Alternative TensorFlow/Keras**
 - **Architecture:** Dense 512→256→128→64→2
-- **Performance:** R² > 0.85 global
-- **Use case:** TensorFlow/Keras development
+- **Performance:** R² < 0.5 (limité par qualité données)
+- **Utilisation:** Recherche et développement TensorFlow
+
+#### 5. � Reseau_Ultra_Specialized
+**Architecture ultra-spécialisée**
+- **Architecture:** Modèles ultra-profonds spécialisés
+- **Performance:** R² < 0.5 (limité par qualité données)
+- **Utilisation:** Recherche architectures avancées
 
 ## 📊 Dataset Information
 
