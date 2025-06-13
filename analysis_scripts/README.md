@@ -21,6 +21,18 @@ Ce dossier contient les **scripts d'analyse** utilisés pour étudier les donné
 - **Fonctions**: Comparaison train/test, validation cohérence
 - **Usage**: Debugging des problèmes de données
 
+#### `analyze_dataset_2D.py` ⭐ **NOUVEAU**
+- **Objectif**: Analyse complète du dataset 2D d'anneaux holographiques
+- **Fonctions**: Inventaire complet, statistiques, visualisations, détection de trous
+- **Usage**: Comprendre la structure et qualité du dataset 2D
+- **Outputs**: 8 fichiers (PNG, CSV, rapport texte) dans `outputs_analysis_2D/`
+
+#### `run_complete_dataset_2D_analysis.py` ⭐ **SCRIPT MAÎTRE**
+- **Objectif**: Exécution automatique de toute la chaîne d'analyse 2D
+- **Fonctions**: Vérifications, analyse, organisation, tests, démonstration
+- **Usage**: Une seule commande pour analyse complète (22 secondes)
+- **Outputs**: 11 fichiers organisés + documentation complète
+
 ### 📈 Analyse des Résultats
 
 #### `analyze_existing_results.py`
@@ -49,6 +61,12 @@ python data_quantity_analysis.py
 
 # Détection d'incohérences
 python analyze_data_mismatch.py
+
+# Analyse complète du dataset 2D ⭐ NOUVEAU
+python analyze_dataset_2D.py
+
+# OU exécution complète automatique ⭐ RECOMMANDÉ
+python run_complete_dataset_2D_analysis.py
 ```
 
 ### Analyse des Résultats
@@ -72,6 +90,13 @@ python test_model_on_real_data.py
 - **Statistiques**: Distributions, moyennes, écarts-types
 - **Visualisations**: Histogrammes, scatter plots
 - **Rapports**: Fichiers CSV avec métriques
+
+### Analyse Dataset 2D ⭐ NOUVEAU
+- **Inventaire complet**: 2440 fichiers .mat analysés
+- **Statistiques**: 40 gaps × 61 L_ecran, complétude 100%
+- **8 fichiers générés**: PNG haute résolution, CSV, rapport texte
+- **Visualisations**: Grille d'anneaux, heatmaps, matrices de couverture
+- **Recommandations**: Répartition train/val/test optimale
 
 ### Analyses de Résultats
 - **Métriques**: R², RMSE, MAE par modèle
