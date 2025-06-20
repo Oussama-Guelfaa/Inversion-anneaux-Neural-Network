@@ -1,0 +1,47 @@
+{
+  "model_type": "RobustGapPredictor_Extended_800pts",
+  "dataset": "dataset_merged (0.005-3.000\u00b5m)",
+  "architecture": {
+    "input_points": 800,
+    "augmentation_factor": 4,
+    "noise_level_percent": 3,
+    "data_splits": "70/15/15 (train/val/test)"
+  },
+  "training_time_s": 40.89824986457825,
+  "performance": {
+    "r2_score": 0.9431158049355217,
+    "rmse_um": 0.20937348874987738,
+    "mae_um": 0.17276364970583838
+  },
+  "tolerance_analysis": {
+    "threshold_um": 0.01,
+    "within_tolerance_count": 0,
+    "within_tolerance_percentage": 0.0,
+    "mean_error_um": 0.17276364970583838,
+    "median_error_um": 0.14924468517303469,
+    "max_error_um": 0.4584270668029786
+  },
+  "range_performance": {
+    "0.0-1.0\u00b5m": {
+      "r2": 0.9102771678567148,
+      "rmse": 0.07896725597969997,
+      "n_samples": 29,
+      "tolerance_count": 0,
+      "tolerance_percentage": 0.0
+    },
+    "1.0-2.0\u00b5m": {
+      "r2": 0.745359034527376,
+      "rmse": 0.14358739147664365,
+      "n_samples": 32,
+      "tolerance_count": 0,
+      "tolerance_percentage": 0.0
+    },
+    "2.0-3.0\u00b5m": {
+      "r2": -0.12268478579168351,
+      "rmse": 0.32396484445598756,
+      "n_samples": 30,
+      "tolerance_count": 0,
+      "tolerance_percentage": 0.0
+    }
+  }
+}
