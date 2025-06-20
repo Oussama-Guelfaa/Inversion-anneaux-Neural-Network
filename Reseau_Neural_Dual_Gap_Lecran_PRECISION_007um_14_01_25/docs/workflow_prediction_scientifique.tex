@@ -1,0 +1,365 @@
+\documentclass[10pt,twocolumn]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{colortbl}
+
+% Configuration de la page
+\geometry{a4paper, margin=2cm, columnsep=0.8cm}
+
+% Configuration des couleurs
+\definecolor{darkblue}{RGB}{0,51,102}
+\definecolor{lightblue}{RGB}{51,102,153}
+\definecolor{codeblue}{RGB}{0,102,204}
+\definecolor{codegray}{RGB}{245,245,245}
+
+% Configuration des titres
+\titleformat{\section}{\Large\bfseries\color{darkblue}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{lightblue}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{lightblue}}{\thesubsubsection}{1em}{}
+
+% Configuration des listings
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\footnotesize\ttfamily,
+    keywordstyle=\color{codeblue}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numberstyle=\tiny\color{gray},
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{lightblue},
+    captionpos=b
+}
+
+% Configuration des tableaux
+\arrayrulecolor{lightblue}
+
+% En-tête et pied de page
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\color{darkblue}\small Workflow Prédiction Neural Network}
+\fancyhead[R]{\color{darkblue}\small O. GUELFAA - 2025}
+\fancyfoot[C]{\color{darkblue}\thepage}
+
+\title{\color{darkblue}\textbf{Workflow Détaillé du Test de Prédiction\\sur 2392 Échantillons}\\
+\large\color{lightblue}Modèle Neural Dual Gap + L\_ecran\\
+Validation Étendue et Guide Pratique}
+
+\author{
+\textbf{Oussama GUELFAA}\\
+\small Université de Technologie\\
+\small Département d'Ingénierie Optique\\
+\small \texttt{guelfaao@gmail.com}
+}
+
+\date{\color{darkblue}19 Juin 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\color{darkblue}
+Ce document présente le workflow détaillé du test de prédiction sur 2392 échantillons pour le modèle neural dual Gap + L\_ecran. Le modèle, composé de 1,318,882 paramètres, atteint des performances exceptionnelles avec un R² de 0.9944 pour le paramètre Gap et 0.9887 pour L\_ecran. Nous documentons le processus complet de chargement, normalisation, prédiction et évaluation, ainsi qu'un guide pratique pour l'application sur nouvelles données. Les résultats confirment une précision de 99.0\% dans la tolérance ±0.01µm pour Gap et 93.9\% dans la tolérance ±0.1µm pour L\_ecran.
+\end{abstract}
+
+\section{Introduction}
+
+Le modèle neural dual Gap + L\_ecran représente une avancée significative dans la prédiction de paramètres holographiques à partir de profils d'intensité radiaux. Développé pour l'analyse d'anneaux de diffraction, ce modèle prédit simultanément deux paramètres critiques : l'épaisseur du gap (Gap) et la distance écran-objet (L\_ecran).
+
+\subsection{Contexte et Motivation}
+
+L'analyse holographique nécessite une précision exceptionnelle pour les applications industrielles. Les tolérances requises sont de ±0.01µm pour le Gap et ±0.1µm pour L\_ecran. Le test étendu sur 2392 échantillons vise à valider la robustesse du modèle sur un large échantillon représentatif.
+
+\subsection{Architecture du Modèle}
+
+Le modèle \texttt{DualParameterPredictor} utilise une architecture de réseau neuronal profond avec :
+\begin{itemize}
+    \item \textbf{Entrée :} 600 points d'intensité radiale
+    \item \textbf{Paramètres :} 1,318,882 paramètres optimisés
+    \item \textbf{Sortie :} 2 valeurs [Gap, L\_ecran]
+    \item \textbf{Entraînement :} 300 epochs sur dataset augmenté
+\end{itemize}
+
+\section{Méthodologie}
+
+\subsection{Chargement du Modèle}
+
+Le modèle est chargé depuis le fichier \texttt{dual\_parameter\_model.pth} contenant :
+
+\begin{lstlisting}[language=Python, caption=Chargement du modèle]
+checkpoint = torch.load(model_path, 
+                       map_location='cpu', 
+                       weights_only=False)
+
+model = DualParameterPredictor(input_size=600)
+model.load_state_dict(checkpoint['model_state_dict'])
+model.eval()
+\end{lstlisting}
+
+Le checkpoint contient :
+\begin{itemize}
+    \item \texttt{model\_state\_dict} : Poids du réseau
+    \item \texttt{config} : Configuration d'entraînement
+    \item \texttt{training\_info} : Informations d'entraînement
+    \item \texttt{test\_metrics} : Métriques de performance
+\end{itemize}
+
+\subsection{Configuration des Données}
+
+Pour obtenir approximativement 2400 échantillons de test, nous utilisons une division 70/16/14 :
+
+\begin{equation}
+\begin{aligned}
+N_{train} &= 0.70 \times 17080 = 11955 \\
+N_{val} &= 0.16 \times 17080 = 2733 \\
+N_{test} &= 0.14 \times 17080 = 2392
+\end{aligned}
+\end{equation}
+
+\begin{lstlisting}[language=Python, caption=Configuration des splits]
+config = {
+    'data_processing': {
+        'data_splits': {
+            'train': 0.70, 
+            'validation': 0.16, 
+            'test': 0.14
+        }
+    }
+}
+\end{lstlisting}
+
+\subsection{Rôle du DualDataLoader}
+
+Le \texttt{DualDataLoader} effectue plusieurs opérations critiques :
+
+\begin{enumerate}
+    \item \textbf{Chargement} : Cache \texttt{augmented\_dataset\_advanced.npz}
+    \item \textbf{Séparation stricte} : Aucun chevauchement entre sets
+    \item \textbf{Normalisation} : StandardScaler pour profils
+    \item \textbf{Scaling séparé} : Gap et L\_ecran normalisés indépendamment
+\end{enumerate}
+
+La normalisation suit la formule :
+\begin{equation}
+X_{norm} = \frac{X - \mu}{\sigma}
+\end{equation}
+
+où $\mu$ et $\sigma$ sont calculés sur l'ensemble d'entraînement.
+
+\section{Processus de Prédiction}
+
+\subsection{Workflow Détaillé}
+
+Le processus de prédiction suit trois étapes principales :
+
+\subsubsection{Étape 1 : Normalisation}
+
+\begin{lstlisting}[language=Python, caption=Normalisation de l'entrée]
+profile_scaled = data_loader.input_scaler.transform(
+    profile.reshape(1, -1)
+)
+\end{lstlisting}
+
+\textbf{Exemple concret :}
+\begin{align}
+\text{Input brut} &: [0.737, 1.246, \ldots, 0.892] \\
+\text{Input normalisé} &: [-0.874, 0.893, \ldots, -0.234]
+\end{align}
+
+\subsubsection{Étape 2 : Prédiction}
+
+\begin{lstlisting}[language=Python, caption=Prédiction par le réseau]
+with torch.no_grad():
+    input_tensor = torch.FloatTensor(profile_scaled)
+    prediction_scaled = model(input_tensor).numpy()
+\end{lstlisting}
+
+\textbf{Transformation observée :}
+\begin{equation}
+f_{NN}([-0.874, 0.893, \ldots]) = [1.184, 0.624]
+\end{equation}
+
+\subsubsection{Étape 3 : Dénormalisation}
+
+\begin{lstlisting}[language=Python, caption=Dénormalisation de la sortie]
+prediction_original = data_loader.inverse_transform_predictions(
+    prediction_scaled
+)
+\end{lstlisting}
+
+\textbf{Résultat final :}
+\begin{align}
+\text{Output normalisé} &: [1.184, 0.624] \\
+\text{Output physique} &: [0.1699\text{µm}, 11.02\text{µm}]
+\end{align}
+
+\subsection{Exemple de Validation}
+
+Pour l'échantillon test, nous obtenons :
+\begin{itemize}
+    \item \textbf{Gap prédit :} 0.1699 µm
+    \item \textbf{Gap vrai :} 0.1689 µm
+    \item \textbf{Erreur :} 0.0010 µm (excellent !)
+\end{itemize}
+
+\section{Résultats et Métriques}
+
+\subsection{Métriques de Performance}
+
+Les métriques sont calculées selon les formules standard :
+
+\subsubsection{Coefficient de Détermination R²}
+\begin{equation}
+R^2 = 1 - \frac{SS_{res}}{SS_{tot}} = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}
+\end{equation}
+
+\subsubsection{Erreur Absolue Moyenne (MAE)}
+\begin{equation}
+MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|
+\end{equation}
+
+\subsubsection{Erreur Quadratique Moyenne (RMSE)}
+\begin{equation}
+RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}
+\end{equation}
+
+\subsection{Résultats sur 2392 Échantillons}
+
+\begin{table}[H]
+\centering
+\caption{Performances du Modèle sur 2392 Échantillons}
+\begin{tabular}{lcc}
+\toprule
+\rowcolor{lightblue!20}
+\textbf{Métrique} & \textbf{Gap} & \textbf{L\_ecran} \\
+\midrule
+R² & 0.9944 & 0.9887 \\
+MAE (µm) & 0.0035 & 0.0341 \\
+RMSE (µm) & 0.0043 & 0.0466 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Analyse de Tolérance}
+
+L'analyse de tolérance évalue le pourcentage d'échantillons respectant les spécifications :
+
+\begin{equation}
+\text{Accuracy} = \frac{\sum_{i=1}^{n} \mathbf{1}_{|y_i - \hat{y}_i| \leq \tau}}{n}
+\end{equation}
+
+où $\tau$ est la tolérance ($\tau_{gap} = 0.01$µm, $\tau_{L\_ecran} = 0.1$µm).
+
+\begin{table}[H]
+\centering
+\caption{Analyse de Tolérance}
+\begin{tabular}{lccc}
+\toprule
+\rowcolor{lightblue!20}
+\textbf{Paramètre} & \textbf{Tolérance} & \textbf{Succès} & \textbf{Accuracy} \\
+\midrule
+Gap & ±0.01µm & 2368/2392 & 99.0\% \\
+L\_ecran & ±0.1µm & 2245/2392 & 93.9\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Statistiques d'Erreurs}
+
+\begin{table}[H]
+\centering
+\caption{Statistiques d'Erreurs Détaillées}
+\begin{tabular}{lcc}
+\toprule
+\rowcolor{lightblue!20}
+\textbf{Statistique} & \textbf{Gap (µm)} & \textbf{L\_ecran (µm)} \\
+\midrule
+Maximum & 0.0110 & 0.1644 \\
+Minimum & 0.0000 & 0.0000 \\
+Médiane & 0.0031 & 0.0245 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Guide Pratique}
+
+\subsection{Test sur Nouvelles Données}
+
+Pour appliquer le modèle sur de nouvelles données, suivez ce workflow :
+
+\subsubsection{Étape 1 : Préparation des Données}
+
+\begin{lstlisting}[language=Python, caption=Format des données requises]
+# Format requis:
+X_new = np.load('mes_profils.npy')    # [n_samples, 600]
+y_new = np.load('mes_labels.npy')     # [n_samples, 2] (optionnel)
+\end{lstlisting}
+
+\subsubsection{Étape 2 : Chargement du Modèle}
+
+\begin{lstlisting}[language=Python, caption=Chargement pour nouvelles données]
+from test_nouvelles_donnees import load_model_for_new_data
+model, data_loader = load_model_for_new_data()
+\end{lstlisting}
+
+\subsubsection{Étape 3 : Prédictions}
+
+\begin{lstlisting}[language=Python, caption=Exécution des prédictions]
+from test_nouvelles_donnees import test_nouvelles_donnees
+results = test_nouvelles_donnees(X_new, y_new)
+\end{lstlisting}
+
+\subsection{Sortie Automatique}
+
+Le script génère automatiquement :
+\begin{itemize}
+    \item \textbf{Prédictions} : Gap et L\_ecran pour chaque échantillon
+    \item \textbf{Métriques} : R², MAE, RMSE si labels fournis
+    \item \textbf{Tolérance} : Pourcentage dans spécifications
+    \item \textbf{Sauvegarde} : JSON et visualisations
+\end{itemize}
+
+\section{Conclusion}
+
+Le test étendu sur 2392 échantillons confirme les performances exceptionnelles du modèle neural dual Gap + L\_ecran. Avec un R² de 0.9944 pour Gap et 0.9887 pour L\_ecran, le modèle atteint une précision industrielle avec 99.0\% des prédictions Gap dans la tolérance ±0.01µm.
+
+Le workflow documenté garantit la reproductibilité et facilite l'application sur nouvelles données. Le modèle est validé pour utilisation en production avec des performances robustes et fiables.
+
+\subsection{Points Clés}
+
+\begin{itemize}
+    \item \textbf{Robustesse} : Validé sur 2392 échantillons
+    \item \textbf{Précision} : 99.0\% Gap, 93.9\% L\_ecran dans tolérances
+    \item \textbf{Reproductibilité} : Workflow standardisé
+    \item \textbf{Facilité d'usage} : Scripts automatisés fournis
+\end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{pytorch}
+PyTorch Team. \textit{PyTorch: An Imperative Style, High-Performance Deep Learning Library}. 2019.
+
+\bibitem{sklearn}
+Scikit-learn. \textit{Machine Learning in Python}. Journal of Machine Learning Research, 2011.
+
+\bibitem{numpy}
+NumPy. \textit{Array programming with NumPy}. Nature, 2020.
+\end{thebibliography}
+
+\end{document}
