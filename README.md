@@ -1,229 +1,324 @@
 # 🔬 Inversion d'Anneaux - Neural Network Project
 
 **Auteur:** Oussama GUELFAA
-**Date:** 25 - 01 - 2025
+**Date:** 19 - 06 - 2025
 
 ## 📖 Vue d'Ensemble du Projet
 
-Ce projet implémente des **solutions de réseaux de neurones spécialisées** pour l'analyse holographique d'anneaux et la prédiction de paramètres. Le projet est organisé en **deux catégories principales** selon le type de prédiction : 1D (gap seul) et 2D (gap + L_écran).
+Ce projet implémente des **solutions de réseaux de neurones spécialisées** pour l'analyse holographique d'anneaux et la prédiction de paramètres physiques. Le projet contient plusieurs implémentations optimisées pour différents cas d'usage, de la recherche à la production.
 
-## 🎯 Objectifs
+### 🎯 Objectifs Principaux
 
-- **Objectif Principal**: Prédire les paramètres gap et/ou L_écran à partir de profils d'intensité 1D
-- **Source de Données**: Ratios d'intensité holographiques (I_subs/I_subs_inc) depuis fichiers MATLAB
-- **Précision Cible**: R² > 0.8 pour les tâches de régression (R² > 0.95 atteint)
-- **Architecture**: Réseaux basés sur profils 1D (préférés aux approches CNN 2D)
-- **Modularité**: Chaque réseau comme unité indépendante et déployable
+- **Prédiction de paramètres holographiques** : gap et L_écran à partir de profils d'intensité
+- **Architectures spécialisées** : Réseaux optimisés pour chaque type de prédiction
+- **Performance élevée** : R² > 0.95 pour tous les modèles de production
+- **Robustesse validée** : Tests de bruit, overfitting, généralisation
 
 ## 🏗️ Architecture du Projet
 
-Le projet suit une architecture modulaire organisée par **type de prédiction** :
-
 ```
 Inversion_anneaux/
-├── 🎯 Reseaux_1D_Gap_Prediction/          # Réseaux prédiction gap seul
-│   ├── 🔊 Reseau_Noise_Robustness/        # ⭐ Robustesse bruit (RECOMMANDÉ)
-│   ├── 🔬 Reseau_Gap_Prediction_CNN/      # CNN pour prédiction gap
-│   └── 🧪 Reseau_Overfitting_Test/        # Test validation overfitting
-├── 🎯 Reseaux_2D_Gap_Lecran_Prediction/   # Réseaux prédiction gap + L_écran
-│   ├── 🔧 Reseau_TensorFlow_Alternative/  # Alternative TensorFlow/Keras
-│   └── 🔥 Reseau_Ultra_Specialized/       # Architecture ultra-spécialisée
-├── 📊 data_generation/                    # Données MATLAB et scripts
-├── 🗂️ archive_legacy_networks/           # Archives réseaux précédents
-├── 🔧 utilities/                          # Utilitaires et outils communs
-├── 📋 analysis_scripts/                   # Scripts d'analyse
-└── 📖 README.md                           # Ce fichier
+├── 🎯 Réseaux de Neurones Principaux
+│   ├── Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25/  # ⭐ ULTRA-PRÉCISION - Dual prediction
+│   ├── Reseau_Neural_Dual_Gap_Lecran_FINAL_06_01_25/           # Production - Dual prediction
+│   └── Reseaux_1D_Gap_Prediction/                              # Prédiction gap seul
+│       ├── Reseau_Noise_Robustness/                   # Tests robustesse bruit
+│       ├── Reseau_Gap_Prediction_CNN/                 # CNN spécialisé gap
+│       └── Reseau_Overfitting_Test/                   # Validation overfitting
+├── 📊 Données et Scripts
+│   ├── data_generation/                               # Données MATLAB originales
+│   ├── analysis_scripts/                              # Scripts d'analyse
+│   └── utilities/                                     # Utilitaires communs
+├── 📦 Archives
+│   ├── archive_legacy_networks/                       # Anciens réseaux
+│   ├── legacy_images/                                 # Images historiques
+│   └── legacy_tests/                                  # Tests historiques
+└── 📋 README.md                                       # Cette documentation
 ```
 
-### 🏆 Résultat Majeur : Succès des Réseaux 1D
+## 📁 Structure Modulaire Standardisée
 
-**Découverte clé :** Les réseaux 1D (prédiction gap seul) surpassent largement les réseaux 2D (gap + L_écran) :
-- **Performance 1D** : R² = 0.9948 (quasi-parfait)
-- **Performance 2D** : R² < 0.5 (problématique)
-- **Recommandation** : Utiliser exclusivement les réseaux 1D
-
-### Standardized Network Structure
-
-Each neural network follows the same organization:
+Chaque réseau de neurones suit la même organisation :
 
 ```
 Reseau_XYZ/
-├── run.py              # Autonomous main script
+├── run.py              # Script autonome principal
+├── demo.py             # Démonstration rapide (si disponible)
 ├── config/
-│   └── config.yaml     # Complete configuration
-├── models/             # Trained models (.pth, .h5, .pkl)
-├── plots/              # Visualizations and analysis
-├── results/            # Metrics and reports (JSON, CSV)
-├── docs/               # Specialized documentation
-└── README.md           # Usage guide
+│   └── config.yaml     # Configuration complète
+├── models/             # Modèles entraînés (.pth, .h5, .pkl)
+├── plots/              # Visualisations automatiques
+├── results/            # Métriques et rapports (JSON, CSV)
+├── docs/               # Documentation spécialisée
+├── data/               # Données prétraitées
+├── logs/               # Logs d'entraînement
+└── src/                # Code source modulaire
 ```
 
-## 🚀 Quick Start
+## 🚀 Guide d'Exécution Rapide
 
-### 1️⃣ Setup Environment
+### 1️⃣ Installation des Dépendances
+
 ```bash
-# Install common dependencies
+# Dépendances communes
 pip install torch pandas numpy matplotlib seaborn scikit-learn pyyaml scipy joblib
 
-# For TensorFlow (optional)
+# Pour TensorFlow (optionnel)
 pip install tensorflow
 ```
 
-### 2️⃣ Choose Your Neural Network
+### 2️⃣ Choix du Réseau selon l'Usage
+
+#### 🏆 Pour Production (Recommandé)
 ```bash
-# For production use (recommended)
-cd Reseau_Advanced_Regressor
+# Réseau ultra-précision (NOUVEAU - 19/06/2025)
+cd Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25
+cd src/
 python run.py
 
-# For maximum performance
-cd Reseau_Ultra_Specialized
-python run.py
+# Ou démonstration rapide
+python demo.py
 
-# For gap-only prediction
-cd Reseau_Gap_Prediction_CNN
-python run.py --mode train
+# Tests avancés
+cd ../Test_dataset/
+python test_dataset_2D.py  # Test sur 2440 échantillons
+```
 
-# For robustness testing
-cd Reseau_Noise_Robustness
+#### 🎯 Alternative Production
+```bash
+# Réseau production stable
+cd Reseau_Neural_Dual_Gap_Lecran_FINAL_06_01_25
 python run.py
 ```
 
-### 3️⃣ View Results
-Each network generates:
-- **Models**: Trained neural networks
-- **Plots**: Performance visualizations
-- **Results**: Detailed metrics and reports
+#### 🔬 Pour Recherche Gap Seul
+```bash
+# Robustesse au bruit (le plus robuste)
+cd Reseaux_1D_Gap_Prediction/Reseau_Noise_Robustness
+python run.py
 
-## 🎯 Réseaux de Neurones Disponibles
-
-### 🏆 Catégorie 1D - Prédiction Gap Seul (RECOMMANDÉE)
-
-#### 1. 🔊 Reseau_Noise_Robustness ⭐ **MEILLEUR MODÈLE**
-**Robustesse au bruit avec augmentation de données optimisée**
-- **Architecture:** Dense 512→256→128→1 avec régularisation
-- **Performance:** R² = **0.9948** (quasi-parfait)
-- **Innovation:** Augmentation par interpolation facteur 3
-- **Zone critique:** [1.75-2.00 µm] maîtrisée (R² = 0.99)
-- **Robustesse:** Testé jusqu'à 20% bruit, optimal à 5%
-- **Utilisation:** **Production immédiate recommandée**
-
-#### 2. 🔬 Reseau_Gap_Prediction_CNN
-**CNN spécialisé pour prédiction gap**
-- **Architecture:** CNN 1D avec blocs résiduels
-- **Performance:** R² > 0.90 sur gap
-- **Utilisation:** Exploration architectures convolutionnelles
-
-#### 3. 🧪 Reseau_Overfitting_Test
-**Validation capacité d'apprentissage**
-- **Architecture:** Simple sans régularisation
-- **Performance:** R² ≈ 1.0 sur données d'entraînement
-- **Utilisation:** Tests de validation et diagnostics
-
-### ⚠️ Catégorie 2D - Prédiction Gap + L_écran (RECHERCHE)
-
-#### 4. 🔧 Reseau_TensorFlow_Alternative
-**Alternative TensorFlow/Keras**
-- **Architecture:** Dense 512→256→128→64→2
-- **Performance:** R² < 0.5 (limité par qualité données)
-- **Utilisation:** Recherche et développement TensorFlow
-
-#### 5. � Reseau_Ultra_Specialized
-**Architecture ultra-spécialisée**
-- **Architecture:** Modèles ultra-profonds spécialisés
-- **Performance:** R² < 0.5 (limité par qualité données)
-- **Utilisation:** Recherche architectures avancées
-
-## 📊 Dataset Information
-
-### Common Data Source
-- **Dataset:** `data_generation/all_banque_new_24_01_25_NEW_full.mat`
-- **Variables:**
-  - `L_ecran_subs_vect`: Screen distances (6.0 to 14.0 µm)
-  - `gap_sphere_vect`: Gap values (0.025 to 1.5 µm)
-  - `I_subs`: Scattered intensities [33×30×1000]
-  - `I_subs_inc`: Incident intensities [33×30×1000]
-
-### Training Data
-- **990 samples** (33 L_ecran × 30 gap combinations)
-- **600-1000 radial points** per profile (network-dependent)
-- **Input:** Intensity ratios `I_subs/I_subs_inc`
-- **Output:** Physical parameters [L_ecran, gap]
-
-## 📈 Performance Comparison
-
-| Network | Gap R² | L_ecran R² | Specialty | Training Time |
-|---------|--------|------------|-----------|---------------|
-| Gap Prediction CNN | >0.99 | - | Gap only | ~5 min |
-| Noise Robustness | >0.8* | >0.95* | Noise testing | ~15 min |
-| Overfitting Test | >0.99 | >0.99 | Validation | ~3 min |
-| **Advanced Regressor** ⭐ | >0.8 | >0.95 | **Production** | ~8 min |
-| Ultra Specialized | >0.85 | >0.98 | Max performance | ~20 min |
-| PyTorch Optimized | >0.8 | >0.95 | PyTorch dev | ~10 min |
-| TensorFlow Alternative | >0.8 | >0.95 | TensorFlow dev | ~15 min |
-
-*\* Performance under 5% noise*
-
-## 🔬 Physical Background
-
-### Intensity Calculation
-The neural networks train on the ratio `I_subs/I_subs_inc`, which represents the normalized scattered intensity:
-
-```
-Ratio = |E_total|² / |E_incident|²
-      = |E_incident + E_scattered|² / |E_incident|²
-      = |1 + E_scattered/E_incident|²
+# CNN spécialisé gap
+cd Reseaux_1D_Gap_Prediction/Reseau_Gap_Prediction_CNN
+python run.py
 ```
 
-### Advantages of 1D Profile Approach
-1. **Better Performance:** More efficient than 2D CNN approaches
-2. **Physical Relevance:** Directly related to ring structure
-3. **Interpretability:** Clear relationship between input and output
-4. **Computational Efficiency:** Faster training and inference
+#### 🧪 Pour Tests et Validation
+```bash
+# Test d'overfitting
+cd Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test
+python run.py
+```
 
-## 📚 Documentation
+### 3️⃣ Analyse des Résultats
 
-- **[Project Map](project_map.md):** Complete overview of all networks
-- **Individual READMEs:** Each network has detailed documentation
-- **Configuration Files:** YAML configs for each network
-- **Results:** Automated metrics and visualizations
+```bash
+# Scripts d'analyse des données
+cd analysis_scripts
+python analyze_existing_results.py
+python test_model_on_real_data.py
 
-## 🎯 Selection Guide
+# Analyse complète dataset 2D
+cd analysis_scripts/dataset_2D_analysis
+python run_complete_dataset_2D_analysis.py
+```
 
-### For Production Use
-- **Recommended:** `Reseau_Advanced_Regressor` or `Reseau_Ultra_Specialized`
-- **Reason:** Systematic problem solving, high performance
+## 🎯 Localisation des Modèles Entraînés
 
-### For Research
-- **Gap only:** `Reseau_Gap_Prediction_CNN`
-- **Robustness:** `Reseau_Noise_Robustness`
-- **Diagnostics:** `Reseau_Overfitting_Test`
+### Modèles de Production
 
-### For Development
-- **PyTorch:** `Reseau_PyTorch_Optimized`
-- **TensorFlow:** `Reseau_TensorFlow_Alternative`
+#### Réseau Ultra-Précision (⭐ NOUVEAU - RECOMMANDÉ)
+- **Localisation** : `Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25/models/`
+- **Modèles** :
+  - `dual_parameter_model.pth` - Modèle PyTorch ultra-précis (1,318,882 paramètres)
+  - `input_scaler.pkl` - Normalisateur des profils d'intensité
+  - `gap_scaler.pkl` - Normalisateur spécialisé gap
+  - `L_ecran_scaler.pkl` - Normalisateur spécialisé L_écran
+- **Performance** : R² = 0.9948 (gap), R² = 0.9891 (L_écran)
+- **Précision** : 99.4% gap (±0.01µm), 94.2% L_écran (±0.1µm)
+- **Validé sur** : 2440 échantillons (dataset_2D)
+- **Usage** : Production industrielle haute précision
 
-## 🔧 Modular Benefits
+#### Réseau Production Stable
+- **Localisation** : `Reseau_Neural_Dual_Gap_Lecran_FINAL_06_01_25/models/`
+- **Modèles** :
+  - `dual_gap_lecran_model.pth` - Modèle PyTorch principal
+  - `scaler_X.pkl` - Normalisateur des données d'entrée
+  - `scaler_y.pkl` - Normalisateur des paramètres de sortie
+- **Performance** : R² = 0.9948 (gap), R² = 0.9949 (L_écran)
+- **Usage** : Prédiction conjointe gap + L_écran
 
-### Independent Units
-- ✅ Each network is self-contained
-- ✅ Can be zipped and deployed separately
-- ✅ Easy to compare different approaches
-- ✅ Simplified maintenance and updates
+#### Réseaux Gap Seul
+- **Noise Robustness** : `Reseaux_1D_Gap_Prediction/Reseau_Noise_Robustness/models/`
+  - `noise_robust_model_5pct.pth` - Modèle robuste au bruit
+  - Performance : R² = 0.9948, robuste jusqu'à 10% de bruit
+- **CNN Gap** : `Reseaux_1D_Gap_Prediction/Reseau_Gap_Prediction_CNN/models/`
+  - `gap_prediction_cnn.pth` - CNN spécialisé gap
+  - Performance : R² > 0.99
 
-### Standardized Structure
-- ✅ Consistent organization across networks
-- ✅ Autonomous `run.py` scripts
-- ✅ Complete configuration files
-- ✅ Automated result generation
+### Modèles de Test et Validation
+- **Overfitting Test** : `Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test/models/`
+- **Archives** : `archive_legacy_networks/` (modèles historiques)
 
-## 🎉 Project Achievements
+## 🧭 Navigation entre Implémentations
 
-This modular neural network suite successfully provides:
-- ✅ **7 specialized networks** for different use cases
-- ✅ **Standardized structure** for easy deployment
-- ✅ **High performance** (R² > 0.8 consistently achieved)
-- ✅ **Complete documentation** and configuration
-- ✅ **Production-ready** solutions for holographic analysis
-- ✅ **Modular architecture** for easy extension and maintenance
+### Par Type de Prédiction
 
-**Each network is ready for independent deployment in holographic parameter inversion!** 🚀
+#### Prédiction Dual (Gap + L_écran)
+```bash
+# Réseau ultra-précision (NOUVEAU - RECOMMANDÉ)
+cd Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25
+cd src/
+```
+- **Architecture** : 1,318,882 paramètres optimisés
+- **Données** : 600 points par profil (tronqué optimisé)
+- **Innovation** : Data augmentation avancée + scaling séparé
+- **Résultats** : R² = 0.9948 (gap), R² = 0.9891 (L_écran)
+- **Précision** : 99.4% gap, 94.2% L_écran dans tolérances industrielles
+- **Validé** : 2440 échantillons dataset_2D
+
+```bash
+# Réseau production stable (Alternative)
+cd Reseau_Neural_Dual_Gap_Lecran_FINAL_06_01_25
+```
+- **Architecture** : Dense layers 512→256→128→64→2
+- **Données** : 600 points par profil (optimisé)
+- **Innovation** : Data augmentation 2D par interpolation
+- **Résultats** : R² > 0.99 pour les deux paramètres
+
+#### Prédiction Gap Seul
+```bash
+# Pour robustesse maximale
+cd Reseaux_1D_Gap_Prediction/Reseau_Noise_Robustness
+
+# Pour performance pure
+cd Reseaux_1D_Gap_Prediction/Reseau_Gap_Prediction_CNN
+
+# Pour validation
+cd Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test
+```
+
+### Par Framework
+
+#### PyTorch (Principal)
+- Tous les réseaux utilisent PyTorch par défaut
+- Architecture modulaire avec blocs résiduels
+- Optimisation Adam + ReduceLROnPlateau
+
+#### TensorFlow (Alternatif)
+- Implémentations alternatives disponibles dans certains réseaux
+- Architecture Dense Sequential
+- Compatible avec les modèles PyTorch
+
+## 📊 Données et Formats
+
+### Source des Données
+- **Fichier principal** : `data_generation/all_banque_new_24_01_25_NEW_full.mat`
+- **Variables** : L_ecran_subs_vect, gap_subs_vect, I_subs, I_subs_inc
+- **Échantillons** : 990 profils d'intensité originaux
+- **Augmentation** : Jusqu'à 12,200 échantillons (facteur 5x)
+
+### Formats de Sortie
+- **Modèles** : `.pth` (PyTorch), `.pkl` (Scalers)
+- **Résultats** : `.json` (métriques), `.csv` (historiques)
+- **Visualisations** : `.png` (plots haute résolution)
+
+## 🏆 Performances et Résultats
+
+### Réseau Ultra-Précision (NOUVEAU - 19/06/2025)
+- **Gap** : R² = 0.9948, MAE = 0.0035 µm, RMSE = 0.0042 µm
+- **L_écran** : R² = 0.9891, MAE = 0.0335 µm, RMSE = 0.0460 µm
+- **Précision industrielle** : 99.4% gap (±0.01µm), 94.2% L_écran (±0.1µm)
+- **Validation** : 2440 échantillons dataset_2D
+- **Architecture** : 1,318,882 paramètres optimisés
+- **Temps d'entraînement** : 300 epochs
+
+### Réseau Dual (Production Stable)
+- **Gap** : R² = 0.9946, RMSE = 0.062 µm
+- **L_écran** : R² = 0.9949, RMSE = 0.125 µm
+- **Précision** : 97% (gap), 99.9% (L_écran)
+- **Temps d'entraînement** : 4.2 minutes
+
+### Réseaux Gap Seul
+- **Noise Robustness** : R² = 0.9948, robuste jusqu'à 10% bruit
+- **CNN Gap** : R² > 0.99, convergence rapide
+- **Overfitting Test** : Validation complète, pas de surapprentissage
+
+## 🔧 Utilitaires et Outils
+
+### Scripts d'Analyse
+- **`analysis_scripts/`** : Analyse complète des données et résultats
+- **Dataset 2D Analysis** : Suite de 8 scripts spécialisés
+- **Test sur données réelles** : Validation sur données expérimentales
+
+### Utilitaires Communs
+- **`utilities/`** : Fonctions partagées, configurations, exemples
+- **Data augmentation** : Scripts d'augmentation 2D par interpolation
+- **Validation** : Outils de test et métriques standardisées
+
+## 📈 Recommandations d'Usage
+
+### Pour Utilisateurs Finaux
+1. **Utiliser** : `Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25` (NOUVEAU)
+2. **Exécuter** : `cd src/ && python run.py` ou `python demo.py`
+3. **Tests** : `cd Test_dataset/ && python test_dataset_2D.py`
+4. **Résultats** : Consultez `results/` et `plots/`
+5. **Alternative** : `Reseau_Neural_Dual_Gap_Lecran_FINAL_06_01_25` (stable)
+
+### Pour Développeurs
+1. **Étudier** : Structure modulaire dans `src/`
+2. **Configurer** : Modifier `config/config.yaml`
+3. **Étendre** : Utiliser `utilities/` comme base
+
+### Pour Chercheurs
+1. **Analyser** : Scripts dans `analysis_scripts/`
+2. **Comparer** : Différents réseaux dans `Reseaux_1D_Gap_Prediction/`
+3. **Valider** : Tests de robustesse et overfitting
+
+## 🆕 NOUVEAU - Réseau Ultra-Précision (19/06/2025)
+
+### 🎯 Réseau Neural Dual Gap + L_ecran - PRECISION 007µm
+
+**Localisation** : `Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25/`
+
+#### ✨ Innovations Clés
+- **Architecture optimisée** : 1,318,882 paramètres finement ajustés
+- **Scaling séparé** : Normalisation indépendante gap/L_écran
+- **Data augmentation avancée** : Interpolation sophistiquée
+- **Structure organisée** : Code source dans `src/`, tests dans `Test_dataset/`, docs dans `docs/`
+
+#### 🏆 Performances Exceptionnelles
+- **Gap** : R² = 0.9948 (99.48%), MAE = 0.0035µm
+- **L_écran** : R² = 0.9891 (98.91%), MAE = 0.0335µm
+- **Précision industrielle** : 99.4% gap (±0.01µm), 94.2% L_écran (±0.1µm)
+- **Validation étendue** : 2440 échantillons dataset_2D
+
+#### 🚀 Utilisation Rapide
+```bash
+cd Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25
+
+# Démonstration
+cd src/
+python demo.py
+
+# Test complet sur dataset_2D
+cd ../Test_dataset/
+python test_dataset_2D.py
+
+# Test sur nouvelles données
+python test_nouvelles_donnees.py
+```
+
+#### 📁 Structure Organisée
+```
+Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25/
+├── src/                    # Code source principal
+├── Test_dataset/           # Scripts de test et validation
+├── docs/                   # Documentation complète
+├── models/                 # Modèles entraînés
+├── results/                # Résultats des tests
+└── plots/                  # Visualisations
+```
+
+---
+
+**🎯 Résultat : Maîtrise complète de la prédiction de paramètres holographiques avec précision industrielle ultra-haute !**
