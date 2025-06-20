@@ -1,0 +1,46 @@
+{
+  "titre": "Rapport d'Analyse: Variations de Gap et Prédictions du Réseau de Neurones",
+  "auteur": "Oussama GUELFAA",
+  "date": "17-06-2025",
+  "tache1": {
+    "description": "Visualisation de l'effet d'une petite variation de gap",
+    "parametres": {
+      "gap_values": [
+        0.2,
+        0.21
+      ],
+      "L_ecran": 10.0,
+      "variation_gap": 0.01
+    },
+    "objectif": "Comparer visuellement l'impact d'une variation minime du gap à bruit constant"
+  },
+  "tache2": {
+    "description": "Analyse visuelle d'une prédiction réussie",
+    "parametres": {
+      "gap_vrai": 0.1679113924050633,
+      "gap_predit": 0.16969546675682068,
+      "L_ecran": 11.487603305785123,
+      "erreur_gap": 0.0017840743517573698,
+      "erreur_L_ecran": 0.061762927977506266
+    },
+    "objectif": "Démontrer la fidélité géométrique du modèle de reconstruction"
+  },
+  "methodologie": {
+    "simulation_matlab": "Banque_data_anneaux_Oussama_10_06_2025_small.m",
+    "modele_neural": "DualParameterPredictor (Gap R² = 0.9912, L_ecran R² = 0.9964)",
+    "bruit_entrainement": "5% gaussien",
+    "tolerances": {
+      "gap": "±0.01 µm",
+      "L_ecran": "±0.1 µm"
+    }
+  },
+  "fichiers_generes": [
+    "plots/matlab_simulation_values.json",
+    "plots/gap_variation_analysis_preparation.png",
+    "matlab_simulation_task1.m",
+    "matlab_simulation_task2.m",
+    "task1_gap_variation_results.mat",
+    "task2_successful_prediction_results.mat",
+    "plots/analyse_complete_gap_variations.png"
+  ]
+}

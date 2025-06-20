@@ -1,0 +1,36 @@
+{
+  "task1_gap_variation": {
+    "L_ecran": 10.0,
+    "gap_values": [
+      0.2,
+      0.21
+    ],
+    "description": "Comparaison gap 0.2 vs 0.21 \u00b5m \u00e0 L=10\u00b5m"
+  },
+  "task2_successful_prediction": {
+    "sample_index": 0,
+    "true_gap": 0.1679113924050633,
+    "true_L_ecran": 11.487603305785123,
+    "pred_gap": 0.16969546675682068,
+    "pred_L_ecran": 11.425840377807617,
+    "gap_error": 0.0017840743517573698,
+    "L_ecran_error": 0.061762927977506266,
+    "description": "\u00c9chantillon avec pr\u00e9diction r\u00e9ussie"
+  },
+  "matlab_instructions": {
+    "task1": {
+      "L_ecran_subs_vect": 10.0,
+      "gap_sphere_vect": [
+        0.2,
+        0.21
+      ]
+    },
+    "task2": {
+      "L_ecran_subs_vect": 11.487603305785123,
+      "gap_sphere_vect": [
+        0.1679113924050633,
+        0.16969546675682068
+      ]
+    }
+  }
+}
