@@ -1,0 +1,25 @@
+{
+  "model_type": "RobustGapPredictor",
+  "input_size": 600,
+  "output_size": 1,
+  "scaler_type": "StandardScaler",
+  "source_model": "model_retrained_5percent_factor3.pth",
+  "scaler_recreation_method": "exact_training_replication",
+  "data_preprocessing": {
+    "truncation": "600 points",
+    "augmentation": "interpolation factor 3",
+    "noise": "5% gaussian on training only"
+  },
+  "usage": {
+    "load_function": "load_complete_model()",
+    "predict_function": "predict_gap(intensity_profile)",
+    "no_manual_normalization_needed": true
+  },
+  "files": {
+    "model": "robust_gap_model_with_scaler.pth",
+    "scaler": "input_scaler.pkl",
+    "metadata": "model_metadata.json",
+    "loader": "load_model.py",
+    "example": "example_usage.py"
+  }
+}
