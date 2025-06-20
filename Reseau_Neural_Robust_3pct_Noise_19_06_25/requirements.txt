@@ -1,0 +1,29 @@
+# Requirements for Robust Neural Network Project
+# Auteur: Oussama GUELFAA
+# Date: 19-06-2025
+
+# Core ML Libraries
+torch>=1.9.0
+numpy>=1.21.0
+scikit-learn>=1.0.0
+
+# Data Processing
+scipy>=1.7.0
+joblib>=1.0.0
+
+# Visualization
+matplotlib>=3.4.0
+seaborn>=0.11.0
+
+# Utilities
+tqdm>=4.62.0
+pathlib2>=2.3.0
+
+# Optional: GPU Support
+# torch-audio>=0.9.0
+# torchvision>=0.10.0
+
+# Development
+pytest>=6.2.0
+black>=21.0.0
+flake8>=3.9.0
