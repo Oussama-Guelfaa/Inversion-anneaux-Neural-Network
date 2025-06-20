@@ -1,0 +1,175 @@
+# Configuration for Dual Gap + L_ecran Prediction - Haute Précision 0.007µm
+# Author: Oussama GUELFAA
+# Date: 14 - 01 - 2025
+
+experiment:
+  name: "Dual_Gap_Lecran_Precision_007um"
+  description: "High-precision joint prediction of gap (0.007µm tolerance) and L_ecran parameters"
+  version: "2.0"
+  
+model:
+  name: "DualParameterPredictor"
+  type: "Dense_Network_Dual_Output"
+  input_size: 600  # Truncated profiles for stability
+  output_size: 2   # [gap, L_ecran]
+  
+architecture:
+  # Architecture haute précision pour gap 0.007µm
+  dense_layers:
+    - size: 1024
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.15
+    - size: 512
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.15
+    - size: 256
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.15
+    - size: 128
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.12
+    - size: 64
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.08
+    - size: 32
+      activation: "relu"
+      batch_norm: true
+      dropout: 0.05
+    - size: 2
+      activation: "linear"  # Sortie linéaire pour régression
+
+training:
+  batch_size: 24  # Réduit pour stabilité avec modèle plus grand
+  epochs: 300     # Augmenté pour convergence fine
+  learning_rate: 0.0008  # Légèrement réduit pour précision
+  optimizer: "Adam"
+  weight_decay: 2e-4  # Augmenté pour régularisation
+  loss_function: "Advanced_Weighted_MSE"
+  
+  # Early stopping adapté pour dual output
+  early_stopping:
+    patience: 30
+    min_delta: 0.0001
+    monitor: "val_loss"
+    restore_best_weights: true
+  
+  # Learning rate scheduler
+  scheduler:
+    type: "ReduceLROnPlateau"
+    mode: "min"
+    factor: 0.5
+    patience: 15
+    min_lr: 1e-6
+
+data_processing:
+  # Data augmentation intelligente pour précision 0.007µm
+  augmentation:
+    enable: true
+    gap_density: 3      # Densité gap augmentée
+    L_ecran_density: 2  # Densité L_ecran standard
+    method: "cubic"     # Interpolation cubique pour précision
+    include_original: true
+    adaptive_mode: true # Augmentation adaptative
+    difficult_boost: 3  # Boost échantillons difficiles
+    synthetic_noise: true # Bruit synthétique réaliste
+    noise_levels: [0.001, 0.002, 0.005]
+  
+  # Splits des données (conforme aux bonnes pratiques)
+  data_splits:
+    train: 0.64      # 80% × 0.8 = 64% du total
+    validation: 0.16  # 80% × 0.2 = 16% du total
+    test: 0.20       # 20% du total (totalement disjoint)
+  
+  # Preprocessing
+  normalization:
+    input_scaler: "StandardScaler"
+    target_scaling:
+      gap_scaler: "StandardScaler"
+      L_ecran_scaler: "StandardScaler"
+      separate_scaling: true  # Scaling séparé pour chaque paramètre
+  
+  # Troncature pour éviter divergence
+  profile_truncation: 600
+
+evaluation:
+  # Critères de succès haute précision
+  performance_targets:
+    gap_accuracy: 0.85      # 85% dans tolérance gap 0.007µm (objectif ambitieux)
+    L_ecran_accuracy: 0.90  # 90% dans tolérance L_ecran
+    combined_r2: 0.85       # R² combiné > 85% (objectif élevé)
+
+  # Tolérance pour évaluation accuracy haute précision
+  tolerance:
+    gap_tolerance: 0.007    # ±0.007 µm pour gap (OBJECTIF PRINCIPAL)
+    L_ecran_tolerance: 0.1  # ±0.1 µm pour L_ecran
+  
+  # Métriques à calculer
+  metrics:
+    - "r2_score"
+    - "mean_absolute_error"
+    - "mean_squared_error"
+    - "accuracy_within_tolerance"
+
+robustness:
+  # Test de robustesse au bruit
+  noise_testing:
+    enable: true
+    noise_levels: [0.0, 0.01, 0.02, 0.05, 0.10]  # 0%, 1%, 2%, 5%, 10%
+    apply_to: "training_only"
+    distribution: "gaussian"
+  
+  # Validation croisée
+  cross_validation:
+    enable: false  # Désactivé pour l'instant (dataset suffisant)
+    folds: 5
+
+paths:
+  # Chemins des données
+  dataset_path: "data_generation/dataset_2D"
+  augmented_data_cache: "data/augmented_dataset.npz"
+  
+  # Chemins de sortie
+  models_dir: "models/"
+  plots_dir: "plots/"
+  results_dir: "results/"
+  logs_dir: "logs/"
+
+visualization:
+  # Graphiques à générer
+  plots:
+    - "training_curves"
+    - "scatter_predictions_gap"
+    - "scatter_predictions_L_ecran"
+    - "residuals_analysis"
+    - "parameter_correlation"
+    - "noise_robustness"
+  
+  # Configuration des graphiques
+  figure_size: [12, 8]
+  dpi: 300
+  style: "seaborn"
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/training.log"
+
+# Paramètres spécifiques au dual output haute précision
+dual_output:
+  # Pondération des losses privilégiant le gap
+  loss_weights:
+    gap_weight: 3.0         # Poids augmenté pour privilégier gap
+    L_ecran_weight: 1.0
+    adaptive_weighting: false
+    precision_mode: true    # Mode haute précision avec loss avancée
+  
+  # Métriques séparées
+  separate_metrics: true
+  
+  # Validation séparée des paramètres
+  individual_validation: true
