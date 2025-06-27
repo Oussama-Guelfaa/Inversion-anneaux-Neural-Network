@@ -1,0 +1,70 @@
+# Configuration du Réseau Neural 2D Gap + L_écran
+# Auteur: Oussama GUELFAA
+# Date: 25/06/2025
+
+# Chemins des données
+data:
+  train_dataset: "data_generation/dataset_2D_Train"
+  test_dataset: "data_generation/dataset_2D_Test"
+  augmented_dataset: "data_generation/dataset_2D_Train_Augmented"
+  
+# Paramètres de data augmentation
+augmentation:
+  gap_density: 2
+  L_ecran_density: 2
+  methods: ["linear", "rbf"]
+  include_original: true
+  truncate_to: 600
+
+# Architecture du modèle
+model:
+  input_size: 600
+  hidden_layers: [512, 256, 128, 64]
+  output_size: 2  # gap + L_ecran
+  dropout_rate: 0.2
+  activation: "relu"
+  
+# Paramètres d'entraînement
+training:
+  batch_size: 32
+  learning_rate: 0.001
+  epochs: 200
+  patience: 20
+  validation_split: 0.2
+  
+# Optimiseur
+optimizer:
+  type: "adam"
+  weight_decay: 1e-5
+  
+# Fonction de perte
+loss:
+  type: "mse"
+  
+# Métriques
+metrics:
+  - "mae"
+  - "r2_score"
+  
+# Normalisation
+normalization:
+  input_scaler: "standard"
+  output_scaler: "standard"
+  
+# Sauvegarde
+save:
+  model_path: "models/dual_parameter_model.pth"
+  scaler_path: "models/"
+  best_model: true
+  
+# Évaluation
+evaluation:
+  tolerance_gap: 0.01  # µm
+  tolerance_L_ecran: 0.5  # µm
+  target_r2: 0.9
+  
+# Visualisation
+plots:
+  save_training_curves: true
+  save_predictions_scatter: true
+  save_error_analysis: true
