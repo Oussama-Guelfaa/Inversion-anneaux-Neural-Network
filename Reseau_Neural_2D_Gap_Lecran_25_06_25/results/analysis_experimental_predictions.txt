@@ -1,0 +1,39 @@
+======================================================================
+RAPPORT D'ANALYSE - PRÉDICTIONS SUR PROFILS EXPÉRIMENTAUX
+======================================================================
+Date: 2025-07-01 15:51:16
+Auteur: Oussama GUELFAA
+Profils analysés: 25
+
+RÉSUMÉ EXÉCUTIF:
+Le réseau de neurones produit des prédictions HORS RANGE PHYSIQUE
+pour les profils expérimentaux, indiquant un problème de généralisation
+simulation → expérience.
+
+STATISTIQUES DES PRÉDICTIONS:
+Gap prédit:
+  • Range: -26.980 à -13.246 µm
+  • Moyenne: -21.143 ± 4.425 µm
+  • Valeurs négatives: 25/25 profils
+
+L_écran prédit:
+  • Range: -71.9 à 162.7 µm
+  • Moyenne: -5.2 ± 79.5 µm
+  • Valeurs négatives: 17/25 profils
+
+PROBLÈMES IDENTIFIÉS:
+1. VALEURS NÉGATIVES: Gap et L_écran négatifs sont non physiques
+2. RANGE ABERRANT: Prédictions très éloignées des valeurs attendues
+3. GÉNÉRALISATION: Échec de la généralisation simulation → expérience
+
+HYPOTHÈSES SUR LES CAUSES:
+1. DIFFÉRENCES D'INTENSITÉ: Profils expérimentaux vs simulés
+2. NORMALISATION: Scalers inadaptés aux données expérimentales
+3. DOMAINE: Données expérimentales hors du domaine d'entraînement
+4. BRUIT: Caractéristiques expérimentales non modélisées
+
+RECOMMANDATIONS:
+1. ANALYSER les différences simulation vs expérience
+2. RÉENTRAÎNER avec données expérimentales étiquetées
+3. ADAPTER la normalisation aux données expérimentales
+4. DÉVELOPPER une stratégie de domain adaptation
