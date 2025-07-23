@@ -1,0 +1,44 @@
+
+RAPPORT DE COMPARAISON - ANNEAUX EXPÉRIMENTAUX vs SIMULATION
+===========================================================
+Date: 18/07/2025
+Auteur: Oussama GUELFAA
+
+DONNÉES COMPARÉES:
+==================
+• Expérimental: 6596 profils PS 3µm (121 points)
+• Simulation: 50 profils (121 points)
+• Gap simulation: 0.0350 - 0.6900 µm
+• L'écran simulation: 8.1 - 12.0 µm
+
+RÉSULTATS DE LA COMPARAISON:
+============================
+• Corrélation profils moyens: R = 0.528
+• Anneaux détectés (expérimental): 5
+• Anneaux détectés (simulation): 5
+
+STATISTIQUES:
+=============
+• Intensité exp. moyenne: 0.968 ± 0.318
+• Intensité sim. moyenne: 0.903 ± 0.343
+• Plage exp.: [0.182, 2.632]
+• Plage sim.: [0.010, 1.803]
+
+ÉVALUATION:
+===========
+⚠️  CORRÉLATION MODÉRÉE entre expérimental et simulation
+✅ Nombre d'anneaux cohérent entre exp. et sim.
+
+RECOMMANDATIONS:
+================
+1. Vérifier la cohérence des données
+2. Structure d'anneaux similaire
+3. Considérer l'adaptation de domaine si nécessaire
+4. Valider avec plus de profils expérimentaux
+
+FICHIERS GÉNÉRÉS:
+=================
+• experimental_vs_simulation_comparison.png
+• experimental_vs_simulation_report.txt
+
+Contact: Oussama GUELFAA - guelfaao@gmail.com

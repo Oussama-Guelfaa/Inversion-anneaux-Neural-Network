@@ -1,0 +1,12 @@
+{
+  "profile_number": 50,
+  "gap_predicted_um": -0.14797133207321167,
+  "L_ecran_predicted_um": 9.650693893432617,
+  "model_used": "ULTRA_DEEP_NETWORK_ALL_22540_PROFILES",
+  "preprocessing": {
+    "r_min": 1.3845845845845846,
+    "r_max": 5.538338338338338,
+    "delta_r": 0.006922922922922923,
+    "final_points": 601
+  }
+}

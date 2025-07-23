@@ -1,0 +1,71 @@
+# Configuration par défaut du CLI Inversion Anneaux
+# Auteur: Oussama GUELFAA
+# Date: 08-07-2025
+
+version: "1.0.0"
+active_profile: "production"
+
+# Profils de configuration
+profiles:
+  production:
+    model_path: "Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25"
+    data_path: "data_generation/dataset_2D"
+    output_path: "cli/outputs"
+    batch_size: 32
+    device: "auto"
+    precision: "high"
+    
+  recherche:
+    model_path: "Reseau_Neural_Dual_Gap_Lecran_FINAL_16_06_25"
+    data_path: "data_generation/dataset_2D_Train"
+    output_path: "cli/outputs/research"
+    batch_size: 16
+    device: "auto"
+    precision: "ultra"
+    
+  demo:
+    model_path: "Reseau_Neural_Dual_Gap_Lecran_FINAL_16_06_25"
+    data_path: "data_generation/dataset_2D_Test"
+    output_path: "cli/outputs/demo"
+    batch_size: 8
+    device: "cpu"
+    precision: "standard"
+
+# Interface utilisateur
+ui:
+  theme: "blue"
+  progress_bars: true
+  ascii_graphs: true
+  rich_tables: true
+  interactive_menus: true
+
+# Logging
+logging:
+  level: "INFO"
+  file: "cli/logs/cli.log"
+  console: true
+  
+# Paramètres par défaut pour les commandes
+defaults:
+  train:
+    epochs: 100
+    early_stopping: true
+    save_best: true
+    
+  predict:
+    confidence_threshold: 0.8
+    output_format: "json"
+    
+  test:
+    tolerance_gap: 0.007  # µm
+    tolerance_L_ecran: 0.5  # µm
+    noise_levels: [0, 1, 2, 5]  # %
+    
+  analyze:
+    max_samples: 1000
+    generate_plots: true
+    
+  visualize:
+    dpi: 300
+    format: "png"
+    style: "seaborn"

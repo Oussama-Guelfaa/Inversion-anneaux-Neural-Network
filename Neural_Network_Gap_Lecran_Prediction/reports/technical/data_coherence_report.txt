@@ -1,0 +1,64 @@
+
+RAPPORT DE VÉRIFICATION DE COHÉRENCE
+====================================
+Date: 18/07/2025
+Auteur: Oussama GUELFAA
+
+DONNÉES ANALYSÉES:
+==================
+• Expérimentales: 50 profils PS 3µm (184 points)
+• Simulation: 100 profils échantillonnés (1000 points → interpolés)
+• Plage radiale commune: 0.000000 - 10.687200 µm
+
+STATISTIQUES COMPARATIVES:
+==========================
+• Moyenne exp: 0.952544
+• Moyenne sim: 0.901970
+• Différence relative: 5.31%
+
+• Écart-type exp: 0.246539
+• Écart-type sim: 0.342620
+• Ratio variabilité: 0.720
+
+TESTS STATISTIQUES:
+===================
+• Test Kolmogorov-Smirnov: 0.246576 (p=0.000000)
+• Distance Wasserstein: 0.123073
+• Interprétation KS: Distributions différentes
+
+STRUCTURE DES ANNEAUX:
+======================
+• Anneaux expérimentaux: 13
+• Anneaux simulation: 7
+• Espacement moyen exp: 0.793267 µm
+• Espacement moyen sim: 1.508667 µm
+• Cohérence structure: ❌ Problématique
+
+ÉVALUATION GLOBALE:
+===================
+• Corrélation profils moyens: ❌ Insuffisante
+• Cohérence statistique: ❌ Problématique
+• Similarité moyennes: ✅ Bonne
+• Structure anneaux: ❌ Incohérente
+
+CONCLUSION:
+===========
+❌ COHÉRENCE FAIBLE
+Différences significatives entre expérimental et simulation.
+Révision complète de l'approche nécessaire.
+
+RECOMMANDATIONS:
+================
+1. Implémenter adaptation de domaine
+2. Revoir la normalisation des données
+3. Monitoring des prédictions
+4. Analyse approfondie des différences structurelles
+
+EXPLICATION DU GAP NÉGATIF:
+===========================
+Le gap négatif observé (-0.151 µm) peut s'expliquer par:
+• Distribution expérimentale hors plage d'entraînement
+• Structure d'anneaux différente
+• Variabilité expérimentale
+
+Contact: Oussama GUELFAA - guelfaao@gmail.com

@@ -1,0 +1,50 @@
+
+RAPPORT DE COHÉRENCE - PREPROCESSING EXACT DU RÉSEAU
+===================================================
+Date: 18/07/2025
+Auteur: Oussama GUELFAA
+
+PARAMÈTRES EXACTS DU RÉSEAU:
+============================
+• r_min: 1.3845845846 µm
+• r_max: 5.5383383383 µm
+• Points: 601
+• Delta_r: 0.0069229229 µm
+
+DONNÉES ANALYSÉES:
+==================
+• Expérimental: Profil 49 (interpolé + normalisé)
+• Simulation: 50 profils échantillonnés (interpolés + normalisés)
+• Preprocessing: IDENTIQUE à l'entraînement du réseau
+
+RÉSULTATS SUR DONNÉES D'ENTRÉE RÉSEAU:
+======================================
+• Corrélation: -0.030500 (❌ Insuffisante)
+• Test KS p-value: 0.000000 (❌ Problématique)
+• Distance Wasserstein: 0.867391
+• Différence moyennes: 0.582711
+
+ÉVALUATION:
+===========
+❌ COHÉRENCE FAIBLE
+Le profil expérimental est significativement différent des données
+d'entraînement. Cela explique le gap négatif.
+
+EXPLICATION DU GAP NÉGATIF (-0.151 µm):
+=======================================
+1. ❌ Données incohérentes - Hors distribution d'entraînement
+2. ❌ Distributions différentes - Domaine différent
+3. ❌ Moyennes différentes - Biais significatif
+
+RECOMMANDATIONS:
+================
+1. Adaptation de domaine nécessaire
+2. Réviser la normalisation
+3. Revoir les données d'entraînement
+4. Valider avec mesures indépendantes si disponibles
+
+CONCLUSION:
+===========
+Le gap négatif s'explique par l'incohérence entre données expérimentales et simulation.
+
+Contact: Oussama GUELFAA - guelfaao@gmail.com

@@ -42,3 +42,13 @@ tqdm>=4.62.0
 
 # Additional scientific libraries
 h5py>=3.1.0  # For HDF5 file support
+
+# CLI Dependencies
+rich>=13.0.0
+click>=8.0.0
+questionary>=1.10.0
+typer>=0.9.0
+colorama>=0.4.4
+termgraph>=0.5.3
+tabulate>=0.9.0
+inquirer>=3.1.0

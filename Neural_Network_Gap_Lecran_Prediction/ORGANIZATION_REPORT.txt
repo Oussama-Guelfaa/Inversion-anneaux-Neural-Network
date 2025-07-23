@@ -1,0 +1,177 @@
+
+RAPPORT D'ORGANISATION - Neural Network Gap L'écran Prediction
+============================================================
+Date: 18/07/2025
+
+STRUCTURE ORGANISÉE:
+===================
+
+.:
+  - Sous-dossiers: 7
+  - Fichiers total: 4
+  - Scripts Python: 1
+
+./utils:
+  - Sous-dossiers: 3
+  - Fichiers total: 0
+
+./utils/monitoring:
+  - Sous-dossiers: 0
+  - Fichiers total: 1
+  - Scripts Python: 1
+
+./utils/data_loaders:
+  - Sous-dossiers: 0
+  - Fichiers total: 3
+  - Scripts Python: 3
+
+./utils/helpers:
+  - Sous-dossiers: 0
+  - Fichiers total: 2
+  - Scripts Python: 2
+
+./models:
+  - Sous-dossiers: 3
+  - Fichiers total: 0
+
+./models/architectures:
+  - Sous-dossiers: 0
+  - Fichiers total: 1
+  - Scripts Python: 1
+
+./models/saved_models:
+  - Sous-dossiers: 0
+  - Fichiers total: 1
+
+./results:
+  - Sous-dossiers: 12
+  - Fichiers total: 1
+
+./results/cpu_lightweight_training:
+  - Sous-dossiers: 0
+  - Fichiers total: 3
+  - Images: 1
+
+./results/ULTRA_DEEP_NETWORK_ALL_22540_PROFILES:
+  - Sous-dossiers: 0
+  - Fichiers total: 4
+  - Fichiers de données: 1
+  - Images: 1
+
+./results/semi_supervised_FULL_DATA_22540:
+  - Sous-dossiers: 0
+  - Fichiers total: 4
+  - Fichiers de données: 1
+  - Images: 1
+
+./results/residual_analysis:
+  - Sous-dossiers: 0
+  - Fichiers total: 3
+  - Images: 1
+
+./results/semi_supervised_light_optimizations:
+  - Sous-dossiers: 0
+  - Fichiers total: 4
+  - Fichiers de données: 1
+  - Images: 1
+
+./results/cpu_enhanced_training_10k_samples:
+  - Sous-dossiers: 0
+  - Fichiers total: 3
+  - Images: 1
+
+./results/semi_supervised_fine_tuning:
+  - Sous-dossiers: 0
+  - Fichiers total: 4
+  - Fichiers de données: 1
+  - Images: 1
+
+./results/predictions:
+  - Sous-dossiers: 0
+  - Fichiers total: 3
+  - Fichiers de données: 1
+
+./visualizations:
+  - Sous-dossiers: 3
+  - Fichiers total: 0
+
+./visualizations/plots:
+  - Sous-dossiers: 0
+  - Fichiers total: 9
+  - Images: 9
+
+./scripts:
+  - Sous-dossiers: 4
+  - Fichiers total: 0
+
+./scripts/analysis:
+  - Sous-dossiers: 1
+  - Fichiers total: 1
+  - Scripts Python: 1
+
+./scripts/training:
+  - Sous-dossiers: 0
+  - Fichiers total: 8
+  - Scripts Python: 7
+
+./scripts/testing:
+  - Sous-dossiers: 0
+  - Fichiers total: 4
+  - Scripts Python: 3
+
+./scripts/preprocessing:
+  - Sous-dossiers: 0
+  - Fichiers total: 4
+  - Scripts Python: 4
+
+./data:
+  - Sous-dossiers: 3
+  - Fichiers total: 1
+
+./data/experimental:
+  - Sous-dossiers: 0
+  - Fichiers total: 14
+  - Scripts Python: 8
+  - Images: 3
+
+./data/processed:
+  - Sous-dossiers: 0
+  - Fichiers total: 6
+  - Fichiers de données: 6
+
+./data/raw:
+  - Sous-dossiers: 2
+  - Fichiers total: 0
+
+./reports:
+  - Sous-dossiers: 3
+  - Fichiers total: 0
+
+./reports/technical:
+  - Sous-dossiers: 0
+  - Fichiers total: 4
+
+
+RÉSUMÉ:
+=======
+✅ Projet entièrement réorganisé
+✅ Structure claire et navigable
+✅ Documentation complète
+✅ Fichiers accessibles et bien classés
+
+AVANTAGES DE LA NOUVELLE ORGANISATION:
+=====================================
+• Navigation intuitive par fonction
+• Séparation claire des responsabilités
+• Facilité de maintenance
+• Évolutivité du projet
+• Documentation intégrée
+
+PROCHAINES ÉTAPES:
+==================
+1. Tester les scripts principaux
+2. Vérifier les imports si nécessaire
+3. Continuer le développement
+4. Maintenir l'organisation
+
+Contact: Oussama GUELFAA - guelfaao@gmail.com

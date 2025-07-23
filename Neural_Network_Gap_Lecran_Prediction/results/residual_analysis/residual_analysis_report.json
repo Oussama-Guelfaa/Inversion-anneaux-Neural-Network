@@ -1,0 +1,112 @@
+{
+  "summary": {
+    "current_correlation": 0.8935009201213682,
+    "current_r2": 0.7983438942577316,
+    "mse": 0.023912035681007648,
+    "mae": 0.13506961816881774,
+    "potential_improvement": "+5-10% corr\u00e9lation possible"
+  },
+  "zone_analysis": [
+    {
+      "zone": 1,
+      "r_start": 0.0,
+      "r_end": 1.3776616616616617,
+      "mse": 0.010826497490085844,
+      "mae": 0.09888878314007629,
+      "correlation": 0.934807832259493,
+      "n_points": 200
+    },
+    {
+      "zone": 2,
+      "r_start": 1.3845845845845848,
+      "r_end": 2.7622462462462467,
+      "mse": 0.015839931701704765,
+      "mae": 0.11285419982738326,
+      "correlation": 0.965819780915278,
+      "n_points": 200
+    },
+    {
+      "zone": 3,
+      "r_start": 2.7691691691691696,
+      "r_end": 4.146830830830831,
+      "mse": 0.04054688595924572,
+      "mae": 0.1788425344254633,
+      "correlation": 0.8554445667964913,
+      "n_points": 200
+    },
+    {
+      "zone": 4,
+      "r_start": 4.1537537537537546,
+      "r_end": 5.531415415415416,
+      "mse": 0.032035634683000094,
+      "mae": 0.1590571002693476,
+      "correlation": 0.5843710139824463,
+      "n_points": 200
+    },
+    {
+      "zone": 5,
+      "r_start": 5.538338338338339,
+      "r_end": 6.916,
+      "mse": 0.020311228571001812,
+      "mae": 0.1257054731818182,
+      "correlation": 0.14166199396565327,
+      "n_points": 200
+    }
+  ],
+  "systematic_errors": {
+    "linear_trend": {
+      "slope": -0.01811925802947335,
+      "intercept": 0.07520213813704969,
+      "strength": 0.01811925802947335
+    },
+    "periodic_oscillation": {
+      "main_period": 0.7753673673673674,
+      "autocorr_peaks": 1
+    },
+    "high_error_zones": [
+      {
+        "r_start": 3.6760720720720723,
+        "r_end": 3.7660700700700707,
+        "max_error": 0.3275647816643784,
+        "mean_error": 0.3208017247509582
+      }
+    ]
+  },
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "category": "Zone Analysis",
+      "issue": "Zone 5.0 a la plus faible corr\u00e9lation (0.142)",
+      "recommendation": "Appliquer un preprocessing sp\u00e9cialis\u00e9 pour la zone radiale 5.54-6.92 \u00b5m",
+      "expected_gain": "+2-3% corr\u00e9lation"
+    },
+    {
+      "priority": "HIGH",
+      "category": "Periodic Errors",
+      "issue": "Oscillation p\u00e9riodique d\u00e9tect\u00e9e (p\u00e9riode: 0.775 \u00b5m)",
+      "recommendation": "Ajouter un filtre adaptatif ou une loss function sensible aux oscillations de p\u00e9riode 0.775 \u00b5m",
+      "expected_gain": "+3-5% corr\u00e9lation"
+    },
+    {
+      "priority": "HIGH",
+      "category": "High Error Zones",
+      "issue": "1 zones d'erreur \u00e9lev\u00e9e d\u00e9tect\u00e9es",
+      "recommendation": "Impl\u00e9menter une loss function pond\u00e9r\u00e9e qui p\u00e9nalise plus ces zones sp\u00e9cifiques",
+      "expected_gain": "+2-4% corr\u00e9lation"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Systematic Bias",
+      "issue": "Tendance lin\u00e9aire d\u00e9tect\u00e9e (pente: -1.81e-02)",
+      "recommendation": "Ajouter une correction de baseline adaptative au preprocessing",
+      "expected_gain": "+1-2% corr\u00e9lation"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Frequency Content",
+      "issue": "Fr\u00e9quences dominantes manqu\u00e9es dans les r\u00e9sidus",
+      "recommendation": "Ajouter des couches convolutionnelles 1D pour capturer les patterns haute fr\u00e9quence",
+      "expected_gain": "+1-3% corr\u00e9lation"
+    }
+  ]
+}

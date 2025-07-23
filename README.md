@@ -1,7 +1,8 @@
 # 🔬 Inversion d'Anneaux - Neural Network Project
 
 **Auteur:** Oussama GUELFAA
-**Date:** 19 - 06 - 2025
+**Date:** 08 - 07 - 2025
+**Version:** 2.0.0 - Avec CLI Moderne
 
 ## 📖 Vue d'Ensemble du Projet
 
@@ -25,10 +26,19 @@ Inversion_anneaux/
 │       ├── Reseau_Noise_Robustness/                   # Tests robustesse bruit
 │       ├── Reseau_Gap_Prediction_CNN/                 # CNN spécialisé gap
 │       └── Reseau_Overfitting_Test/                   # Validation overfitting
+├── 🖥️  CLI Moderne (NOUVEAU)
+│   ├── cli/                                           # Modules CLI
+│   ├── hologram_cli.py                               # Point d'entrée principal
+│   ├── demo_cli.py                                   # Démonstration CLI
+│   ├── test_cli_quick.py                            # Tests rapides
+│   ├── CLI_README.md                                 # Documentation CLI
+│   └── EXTENSION_GUIDE.md                           # Guide d'extension
 ├── 📊 Données et Scripts
 │   ├── data_generation/                               # Données MATLAB originales
 │   ├── analysis_scripts/                              # Scripts d'analyse
 │   └── utilities/                                     # Utilitaires communs
+├── 🧪 Tests
+│   └── tests/                                         # Tests unitaires
 ├── 📦 Archives
 │   ├── archive_legacy_networks/                       # Anciens réseaux
 │   ├── legacy_images/                                 # Images historiques
@@ -109,7 +119,25 @@ cd Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test
 python run.py
 ```
 
-### 3️⃣ Analyse des Résultats
+### 3️⃣ CLI Moderne (⭐ NOUVEAU - RECOMMANDÉ)
+
+```bash
+# Interface interactive complète
+python hologram_cli.py --interactive
+
+# Commandes directes
+python hologram_cli.py train start --model precision
+python hologram_cli.py predict single --input data.mat
+python hologram_cli.py test accuracy --model production
+
+# Démonstration des fonctionnalités
+python demo_cli.py
+
+# Tests rapides
+python test_cli_quick.py
+```
+
+### 4️⃣ Analyse des Résultats
 
 ```bash
 # Scripts d'analyse des données
@@ -121,6 +149,49 @@ python test_model_on_real_data.py
 cd analysis_scripts/dataset_2D_analysis
 python run_complete_dataset_2D_analysis.py
 ```
+
+## 🖥️ CLI Moderne - Interface Unifiée
+
+### ✨ Fonctionnalités Principales
+
+Le nouveau CLI moderne offre une interface unifiée et interactive pour toutes les fonctionnalités :
+
+- **🎯 Interface Interactive** : Menus riches avec navigation intuitive
+- **📊 Formatage Avancé** : Tableaux colorés, panneaux stylés, graphiques ASCII
+- **⚙️ Configuration Flexible** : Profils YAML pour différents cas d'usage
+- **🔄 Barres de Progression** : Suivi visuel des opérations longues
+- **🧪 Tests Intégrés** : Validation et tests de robustesse
+- **📈 Visualisations** : Graphiques ASCII directement dans le terminal
+
+### 🚀 Démarrage Rapide CLI
+
+```bash
+# Mode interactif (recommandé pour débuter)
+python hologram_cli.py --interactive
+
+# Aide générale
+python hologram_cli.py --help
+
+# Démonstration complète
+python demo_cli.py
+```
+
+### 📚 Commandes Principales
+
+| Commande | Description | Exemple |
+|----------|-------------|---------|
+| `train` | Entraînement de modèles | `python hologram_cli.py train start --model precision` |
+| `predict` | Prédictions | `python hologram_cli.py predict single --input data.mat` |
+| `test` | Tests et évaluation | `python hologram_cli.py test accuracy --model production` |
+| `analyze` | Analyse de données | `python hologram_cli.py analyze dataset --dataset-path data/` |
+| `visualize` | Visualisations | `python hologram_cli.py visualize results --results-file test.json` |
+| `config` | Configuration | `python hologram_cli.py config show` |
+
+### 📖 Documentation CLI
+
+- **[CLI_README.md](CLI_README.md)** - Documentation complète du CLI
+- **[EXTENSION_GUIDE.md](EXTENSION_GUIDE.md)** - Guide pour étendre le CLI
+- **[tests/test_cli.py](tests/test_cli.py)** - Tests unitaires
 
 ## 🎯 Localisation des Modèles Entraînés
 
@@ -255,12 +326,45 @@ cd Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test
 - **Data augmentation** : Scripts d'augmentation 2D par interpolation
 - **Validation** : Outils de test et métriques standardisées
 
+## 🆕 Nouveautés Version 2.0.0
+
+### ✨ CLI Moderne Intégré
+- **Interface Interactive** : Navigation intuitive avec menus riches
+- **Commandes Hiérarchiques** : Structure organisée (train/predict/test/analyze/visualize/config)
+- **Formatage Avancé** : Tableaux colorés, panneaux stylés, graphiques ASCII
+- **Configuration Flexible** : Profils YAML pour production/recherche/démo
+- **Tests Automatisés** : Suite de tests intégrée avec validation
+
+### 🎯 Améliorations Techniques
+- **Validation Robuste** : Vérification des chemins, modèles et configurations
+- **Gestion d'Erreurs** : Messages d'erreur clairs et solutions proposées
+- **Performance** : Détection automatique du meilleur device (CPU/CUDA/MPS)
+- **Extensibilité** : Architecture modulaire pour ajout de fonctionnalités
+
+### 📊 Nouvelles Fonctionnalités
+- **Visualisations ASCII** : Graphiques directement dans le terminal
+- **Analyse Avancée** : Comparaison de modèles, distribution des paramètres
+- **Export/Import** : Sauvegarde et partage de configurations
+- **Mode Batch** : Traitement de lots de fichiers
+- **Simulation** : Génération et test d'anneaux synthétiques
+
 ## 📈 Recommandations d'Usage
 
-### Pour Utilisateurs Finaux
-1. **Utiliser** : `Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25` (NOUVEAU)
-2. **Exécuter** : `cd src/ && python run.py` ou `python demo.py`
-3. **Tests** : `cd Test_dataset/ && python test_dataset_2D.py`
+### 🚀 Pour Nouveaux Utilisateurs (RECOMMANDÉ)
+1. **Démarrer avec le CLI** : `python hologram_cli.py --interactive`
+2. **Suivre la démonstration** : `python demo_cli.py`
+3. **Tester rapidement** : `python test_cli_quick.py`
+4. **Consulter la doc** : [CLI_README.md](CLI_README.md)
+
+### 🔬 Pour Utilisateurs Avancés
+1. **Utiliser** : `Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25` (ULTRA-PRÉCISION)
+2. **CLI Production** : `python hologram_cli.py config set-profile --profile production`
+3. **Tests complets** : `python hologram_cli.py test accuracy --model precision --detailed`
+
+### 🧪 Pour Recherche et Développement
+1. **Profil recherche** : `python hologram_cli.py config set-profile --profile recherche`
+2. **Analyse dataset** : `python hologram_cli.py analyze dataset --dataset-path data/ --detailed`
+3. **Extension CLI** : Consulter [EXTENSION_GUIDE.md](EXTENSION_GUIDE.md)
 4. **Résultats** : Consultez `results/` et `plots/`
 5. **Alternative** : `Reseau_Neural_Dual_Gap_Lecran_FINAL_06_01_25` (stable)
 
@@ -274,7 +378,32 @@ cd Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test
 2. **Comparer** : Différents réseaux dans `Reseaux_1D_Gap_Prediction/`
 3. **Valider** : Tests de robustesse et overfitting
 
-## 🆕 NOUVEAU - Réseau Ultra-Précision (19/06/2025)
+## 🆕 NOUVEAU - CLI Moderne + Réseau Ultra-Précision
+
+### 🖥️ CLI Moderne (08/07/2025) - Interface Unifiée
+
+**Localisation** : `cli/`, `hologram_cli.py`, `demo_cli.py`
+
+#### ✨ Fonctionnalités Avancées
+- **Interface Interactive** : Menus riches avec questionary
+- **Commandes Hiérarchiques** : train/predict/test/analyze/visualize/config
+- **Formatage Rich** : Tableaux colorés, panneaux stylés, graphiques ASCII
+- **Configuration YAML** : Profils pour production/recherche/démo
+- **Tests Intégrés** : Validation automatique et tests de robustesse
+
+#### 🚀 Utilisation Simplifiée
+```bash
+# Interface interactive complète
+python hologram_cli.py --interactive
+
+# Commandes directes
+python hologram_cli.py train start --model precision
+python hologram_cli.py predict single --input data.mat
+python hologram_cli.py test accuracy --model production
+
+# Démonstration
+python demo_cli.py
+```
 
 ### 🎯 Réseau Neural Dual Gap + L_ecran - PRECISION 007µm
 
@@ -285,6 +414,7 @@ cd Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test
 - **Scaling séparé** : Normalisation indépendante gap/L_écran
 - **Data augmentation avancée** : Interpolation sophistiquée
 - **Structure organisée** : Code source dans `src/`, tests dans `Test_dataset/`, docs dans `docs/`
+- **Intégration CLI** : Accessible via `python hologram_cli.py train start --model precision`
 
 #### 🏆 Performances Exceptionnelles
 - **Gap** : R² = 0.9948 (99.48%), MAE = 0.0035µm
@@ -293,6 +423,19 @@ cd Reseaux_1D_Gap_Prediction/Reseau_Overfitting_Test
 - **Validation étendue** : 2440 échantillons dataset_2D
 
 #### 🚀 Utilisation Rapide
+
+**Méthode Moderne (CLI) - RECOMMANDÉE :**
+```bash
+# Interface interactive
+python hologram_cli.py --interactive
+
+# Commandes directes
+python hologram_cli.py train start --model precision
+python hologram_cli.py predict single --input data.mat
+python hologram_cli.py test accuracy --model precision --detailed
+```
+
+**Méthode Traditionnelle :**
 ```bash
 cd Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25
 
@@ -303,9 +446,6 @@ python demo.py
 # Test complet sur dataset_2D
 cd ../Test_dataset/
 python test_dataset_2D.py
-
-# Test sur nouvelles données
-python test_nouvelles_donnees.py
 ```
 
 #### 📁 Structure Organisée
@@ -321,4 +461,50 @@ Reseau_Neural_Dual_Gap_Lecran_PRECISION_007um_14_01_25/
 
 ---
 
-**🎯 Résultat : Maîtrise complète de la prédiction de paramètres holographiques avec précision industrielle ultra-haute !**
+## 🎉 Conclusion
+
+Ce projet représente une solution complète et moderne pour l'inversion d'anneaux holographiques :
+
+### 🏆 Réalisations Principales
+- **Précision Ultra-Haute** : ±0.007µm pour le gap, ±0.5µm pour L_écran
+- **Interface Moderne** : CLI interactif avec formatage riche et visualisations
+- **Architecture Robuste** : Validation, tests automatisés, gestion d'erreurs
+- **Flexibilité** : Profils configurables pour différents cas d'usage
+- **Extensibilité** : Architecture modulaire pour ajouts futurs
+
+### 🚀 Prochaines Étapes
+- **Intégration Continue** : Tests automatisés sur nouvelles données
+- **Extensions CLI** : Nouvelles fonctionnalités selon les besoins
+- **Optimisations** : Amélioration continue des performances
+- **Documentation** : Mise à jour continue de la documentation
+
+### 📞 Support et Contact
+
+**Auteur :** Oussama GUELFAA
+**Email :** guelfaao@gmail.com
+**Date :** 08 - 07 - 2025
+**Version :** 2.0.0 - CLI Moderne Intégré
+
+### 📚 Documentation Complète
+- **[CLI_README.md](CLI_README.md)** - Guide complet du CLI moderne
+- **[EXTENSION_GUIDE.md](EXTENSION_GUIDE.md)** - Guide d'extension et personnalisation
+- **[tests/test_cli.py](tests/test_cli.py)** - Tests unitaires complets
+
+### 🛠️ Démarrage Rapide
+```bash
+# Démonstration complète du CLI
+python demo_cli.py
+
+# Tests rapides de validation
+python test_cli_quick.py
+
+# Interface interactive
+python hologram_cli.py --interactive
+
+# Aide complète
+python hologram_cli.py --help
+```
+
+---
+
+**🎯 Résultat : Maîtrise complète de la prédiction de paramètres holographiques avec interface moderne et précision industrielle ultra-haute !**

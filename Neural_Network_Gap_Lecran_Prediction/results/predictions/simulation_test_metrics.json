@@ -1,0 +1,11 @@
+{
+  "gap_r2": 0.9398636817932129,
+  "gap_mae": 0.03818489983677864,
+  "gap_rmse": 0.04988525062799454,
+  "L_ecran_r2": 0.9373728036880493,
+  "L_ecran_mae": 0.21778260171413422,
+  "L_ecran_rmse": 0.2856989800930023,
+  "negative_gaps_count": 0,
+  "negative_gaps_percentage": 0.0,
+  "total_samples": 2000
+}

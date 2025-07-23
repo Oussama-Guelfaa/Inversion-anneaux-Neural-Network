@@ -1,6 +1,9 @@
 # Exclude data_generation directory (contains large MATLAB files and data)
 data_generation/
 
+# Exclude Neural Network data directories (contains large datasets)
+Neural_Network_Gap_Lecran_Prediction/data/
+
 # Python
 __pycache__/
 *.py[cod]

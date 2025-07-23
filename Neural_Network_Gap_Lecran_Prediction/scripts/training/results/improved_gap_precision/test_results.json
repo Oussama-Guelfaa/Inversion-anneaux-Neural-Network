@@ -1,0 +1,12 @@
+{
+  "gap_r2": 0.08459550142288208,
+  "L_ecran_r2": 0.9457715153694153,
+  "gap_mae": 0.16418583691120148,
+  "gap_rmse": 0.19238978624343872,
+  "gap_tolerance_001": 0.5912786400591279,
+  "gap_tolerance_007": 3.473762010347376,
+  "gap_tolerance_01": 4.508499630450849,
+  "success_r2": false,
+  "success_007": false,
+  "success_001": false
+}
