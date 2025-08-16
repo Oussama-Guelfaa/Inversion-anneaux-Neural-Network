@@ -69,13 +69,6 @@ Développer un modèle d'apprentissage automatique qui peut :
 - **L_ecran:** 9.980 à 10.000 µm (CV = 0.1%)
 - **Toutes les prédictions dans les plages physiques réalistes**
 
-## 🎨 Style Narratif Personnel
-
-Le rapport utilise un style personnel et réflexif avec des formulations comme :
-- *"J'ai d'abord supposé que..."*
-- *"Après plusieurs essais infructueux, je me suis rendu compte que..."*
-- *"J'ai donc décidé de modifier légèrement l'approche en..."*
-- *"Les résultats se sont nettement améliorés lorsque..."*
 
 ## 📁 Fichiers Associés
 
