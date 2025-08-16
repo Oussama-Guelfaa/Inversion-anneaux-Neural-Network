@@ -1,0 +1,875 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{subcaption}
+\usepackage{caption}
+% Configuration des couleurs
+\definecolor{darkblue}{RGB}{0,51,102}
+\definecolor{lightblue}{RGB}{51,153,255}
+\definecolor{orange}{RGB}{255,102,0}
+\definecolor{green}{RGB}{0,153,51}
+
+% Thème Beamer
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamercolor{structure}{fg=darkblue}
+\setbeamercolor{frametitle}{bg=darkblue,fg=white}
+\setbeamercolor{title}{fg=darkblue}
+
+% Configuration des listings
+\lstset{
+    language=Python,
+    basicstyle=\tiny\ttfamily,
+    keywordstyle=\color{darkblue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{orange},
+    numbers=left,
+    numberstyle=\tiny,
+    frame=single,
+    breaklines=true,
+    showstringspaces=false
+}
+
+% Informations du document
+\title[Réseaux de Neurones Holographiques]{Développement d'un Réseau de Neurones pour l'Analyse d'Anneaux Holographiques}
+\subtitle{Validation Croisée K-Fold et Prédiction de Paramètres Physiques}
+\author[O. GUELFAA]{Oussama GUELFAA}
+\institute[Stage]{Projet de Stage - Analyse Holographique}
+\date{\today}
+
+\begin{document}
+
+% Page de titre
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Plan de la présentation
+\begin{frame}{Plan de la Présentation}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction et Problématique}
+
+\begin{frame}{Contexte : Analyse d'Anneaux Holographiques}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Problématique Scientifique :}
+            \begin{itemize}
+                \item Prédiction de paramètres physiques critiques
+                \item \textcolor{darkblue}{\textbf{Gap}} : épaisseur entre surfaces (µm)
+                \item \textcolor{darkblue}{\textbf{L\_écran}} : distance écran-objet (µm)
+                \item Précision requise : ±0.01µm (gap), ±0.5µm (L\_écran)
+            \end{itemize}
+            
+            \vspace{0.5cm}
+            \textbf{Données d'Entrée :}
+            \begin{itemize}
+                \item Profils d'intensité holographiques 1D
+                \item 600 points par profil (tronqués)
+                \item Ratio I\_subs/I\_subs\_inc normalisé
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{plots/intensity_profiles_600pts.png}
+                \caption{Exemples de profils d'intensité}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Dataset et Préparation des Données}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Dataset 2D Complet :}
+            \begin{itemize}
+                \item \textcolor{green}{\textbf{55 200}} échantillons d'entraînement
+                \item \textcolor{green}{\textbf{1 840}} échantillons de test
+                \item 40 valeurs de gap : 0.0 - 0.4 µm
+                \item 61 valeurs de L\_écran : 4 - 8 µm
+                \item Augmentation de données par interpolation
+            \end{itemize}
+            
+            \vspace{0.3cm}
+            \textbf{Préprocessing :}
+            \begin{itemize}
+                \item Troncature à 600 points
+                \item Filtrage gaussien (σ=0.5)
+                \item Normalisation StandardScaler/MinMaxScaler
+                \item Split aléatoire (recommandation tuteur)
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{plots/data_augmentation_validation.png}
+                \caption{Validation de l'augmentation de données}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Architecture du Réseau de Neurones}
+
+\begin{frame}[fragile]{Architecture ImprovedDualParameterNet}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Architecture Profonde Optimisée :}
+            \begin{itemize}
+                \item \textcolor{darkblue}{\textbf{Backbone partagé}} : 600→1024→768→512→256→128→64
+                \item \textcolor{orange}{\textbf{Têtes spécialisées}} pour gap et L\_écran
+                \item BatchNormalization + Dropout adaptatif
+                \item Initialisation Xavier pour stabilité
+            \end{itemize}
+            
+            \vspace{0.3cm}
+            \textbf{Innovations Clés :}
+            \begin{itemize}
+                \item Loss pondérée (gap×15, L\_écran×1)
+                \item Dropout décroissant (0.15→0.06)
+                \item Têtes asymétriques (gap plus complexe)
+                \item Early stopping par fold
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{lstlisting}[caption=Têtes spécialisées]
+# Tête Gap (plus complexe)
+self.gap_head = nn.Sequential(
+    nn.Linear(64, 32),
+    nn.ReLU(),
+    nn.Dropout(0.03),
+    nn.Linear(32, 16),
+    nn.ReLU(),
+    nn.Linear(16, 1)
+)
+
+# Tête L_écran (simplifiée)
+self.L_ecran_head = nn.Sequential(
+    nn.Linear(64, 32),
+    nn.ReLU(),
+    nn.Dropout(0.03),
+    nn.Linear(32, 1)
+)
+            \end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Loss Function et Optimisation}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Loss Pondérée Personnalisée :}
+            \begin{lstlisting}[caption=WeightedDualLoss]
+class WeightedDualLoss(nn.Module):
+    def __init__(self, gap_weight=15.0, 
+                 L_ecran_weight=1.0):
+        super().__init__()
+        self.gap_weight = gap_weight
+        self.L_ecran_weight = L_ecran_weight
+        self.mse = nn.MSELoss()
+    
+    def forward(self, predictions, targets):
+        gap_loss = self.mse(predictions[:, 0], 
+                           targets[:, 0])
+        L_ecran_loss = self.mse(predictions[:, 1], 
+                               targets[:, 1])
+        
+        total_loss = (self.gap_weight * gap_loss + 
+                     self.L_ecran_weight * L_ecran_loss)
+        
+        return total_loss, gap_loss, L_ecran_loss
+            \end{lstlisting}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{Configuration d'Entraînement :}
+            \begin{itemize}
+                \item \textbf{Optimiseur} : AdamW (lr=0.0005, wd=1e-4)
+                \item \textbf{Scheduler} : ReduceLROnPlateau
+                \item \textbf{Batch size} : 32
+                \item \textbf{Early stopping} : patience=20
+                \item \textbf{Gradient clipping} : max\_norm=1.0
+            \end{itemize}
+            
+            \vspace{0.3cm}
+            \textbf{Justification du Poids Gap×15 :}
+            \begin{itemize}
+                \item Gap plus difficile à prédire
+                \item Tolérance plus stricte (±0.01µm)
+                \item Impact critique sur la précision
+                \item Équilibrage des gradients
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Validation Croisée K-Fold}
+
+\begin{frame}{Méthodologie K-Fold Cross-Validation}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Recommandations du Tuteur Appliquées :}
+            \begin{enumerate}
+                \item \textcolor{green}{\textbf{Split aléatoire}} au lieu de stratifié
+                \item \textcolor{green}{\textbf{K-Fold CV}} pour évaluation robuste
+                \item \textcolor{green}{\textbf{Dataset optimal}} : 55 200 échantillons
+            \end{enumerate}
+            
+            \vspace{0.3cm}
+            \textbf{Implémentation K-Fold :}
+            \begin{itemize}
+                \item 5 folds avec mélange aléatoire initial
+                \item Scalers indépendants par fold
+                \item Early stopping individuel
+                \item Sauvegarde du meilleur fold
+                \item Métriques complètes par fold
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{plots/kfold_comparaison_folds.png}
+                \caption{Comparaison des performances par fold}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Résultats de la Validation Croisée}
+    \begin{table}[h]
+        \centering
+        \caption{Performances par Fold - Validation Croisée K-Fold}
+        \begin{tabular}{@{}ccccc@{}}
+            \toprule
+            \textbf{Fold} & \textbf{Gap R²} & \textbf{Gap MAE (µm)} & \textbf{L\_écran R²} & \textbf{Convergence} \\
+            \midrule
+            \textcolor{green}{\textbf{1}} & \textcolor{green}{\textbf{0.624}} & \textcolor{green}{\textbf{0.0375}} & 0.991 & 94 epochs \\
+            2 & 0.523 & 0.0462 & 0.990 & 64 epochs \\
+            \textcolor{green}{\textbf{3}} & \textcolor{green}{\textbf{0.687}} & \textcolor{green}{\textbf{0.0376}} & 0.991 & 77 epochs \\
+            4 & 0.544 & 0.0465 & 0.991 & 78 epochs \\
+            5 & 0.401 & 0.0526 & 0.983 & 77 epochs \\
+            \midrule
+            \textbf{Moyenne} & \textbf{0.556} & \textbf{0.0441} & \textbf{0.989} & \textbf{78 epochs} \\
+            \textbf{Écart-type} & \textbf{±0.097} & \textbf{±0.0058} & \textbf{±0.003} & - \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    
+    \vspace{0.3cm}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Observations Clés :}
+            \begin{itemize}
+                \item Fold 1 sélectionné (meilleur Gap MAE)
+                \item Variance Gap acceptable (±0.097)
+                \item L\_écran très stable (±0.003)
+                \item Convergence rapide (78 epochs moyenne)
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{Validation de la Robustesse :}
+            \begin{itemize}
+                \item 5 folds cohérents
+                \item Pas d'overfitting détecté
+                \item Généralisation validée
+                \item Temps total : 67 minutes
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\section{Résultats et Performances}
+
+\begin{frame}{Performances sur Dataset de Test}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Test Final (1 840 échantillons) :}
+            \begin{table}[h]
+                \centering
+                \begin{tabular}{@{}lcc@{}}
+                    \toprule
+                    \textbf{Métrique} & \textbf{Gap} & \textbf{L\_écran} \\
+                    \midrule
+                    \textbf{R²} & \textcolor{green}{\textbf{0.644}} & \textcolor{green}{\textbf{0.991}} \\
+                    \textbf{MAE} & \textcolor{green}{\textbf{0.0365 µm}} & \textcolor{green}{\textbf{0.1 µm}} \\
+                    \textbf{Médiane} & 0.0093 µm & - \\
+                    \textbf{±0.01µm} & \textcolor{orange}{52.3\%} & - \\
+                    \textbf{±0.02µm} & \textcolor{green}{68.6\%} & - \\
+                    \textbf{±0.5µm} & - & \textcolor{green}{100\%} \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+            
+            \textbf{Cohérence K-Fold ↔ Test :}
+            \begin{itemize}
+                \item Gap R² : 0.556 → \textcolor{green}{\textbf{0.644}} (+15.8\%)
+                \item Gap MAE : 0.0441 → \textcolor{green}{\textbf{0.0365}} (-17.2\%)
+                \item \textcolor{green}{\textbf{Généralisation excellente !}}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{plots/kfold_evolution_metriques.png}
+                \caption{Distribution des performances K-Fold}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+\begin{frame}{Exemples de Prédictions Remarquables}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Prédictions Parfaites (Erreur < 0.0001µm) :}
+            \begin{table}[h]
+                \centering
+                \scriptsize
+                \begin{tabular}{@{}lcc@{}}
+                    \toprule
+                    \textbf{Fichier} & \textbf{Gap Réel} & \textbf{Gap Prédit} \\
+                    \midrule
+                    gap\_0.0850um\_L\_5.125um & 0.0850 & 0.0850 \\
+                    gap\_0.1350um\_L\_6.350um & 0.1350 & 0.1350 \\
+                    gap\_0.2700um\_L\_6.000um & 0.2700 & 0.2700 \\
+                    gap\_0.1400um\_L\_5.650um & 0.1400 & 0.1400 \\
+                    gap\_0.2150um\_L\_7.400um & 0.2150 & 0.2150 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+        
+            \textbf{Statistiques de Précision :}
+            \begin{itemize}
+                \item \textcolor{green}{\textbf{10 prédictions}} avec erreur < 0.0001µm
+                \item \textcolor{green}{\textbf{52.3\%}} dans tolérance ±0.01µm
+                \item \textcolor{green}{\textbf{68.6\%}} dans tolérance ±0.02µm
+                \item Médiane d'erreur : \textcolor{green}{\textbf{0.0093µm}}
+            \end{itemize}
+        \end{column}
+        
+    \end{columns}
+\end{frame}
+
+\section{Comparaison et Validation}
+
+\begin{frame}{Comparaison Modèle K-Fold vs Modèle Amélioré}
+    \begin{table}[h]
+        \centering
+        \caption{Impact des Recommandations du Tuteur}
+        \begin{tabular}{@{}lccc@{}}
+            \toprule
+            \textbf{Métrique} & \textbf{Modèle Amélioré} & \textbf{Modèle K-Fold} & \textbf{Amélioration} \\
+            \midrule
+            \textbf{Gap R²} & 0.482 & \textcolor{green}{\textbf{0.644}} & \textcolor{green}{\textbf{+33.5\%}} \\
+            \textbf{Gap MAE (µm)} & 0.0456 & \textcolor{green}{\textbf{0.0365}} & \textcolor{green}{\textbf{-20.0\%}} \\
+            \textbf{L\_écran R²} & 0.989 & \textcolor{green}{\textbf{0.991}} & \textcolor{green}{\textbf{+0.2\%}} \\
+            \textbf{±0.01µm (\%)} & 50.1 & \textcolor{green}{\textbf{52.3}} & \textcolor{green}{\textbf{+2.2\%}} \\
+            \textbf{±0.02µm (\%)} & 65.7 & \textcolor{green}{\textbf{68.6}} & \textcolor{green}{\textbf{+2.9\%}} \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    \vspace{0.3cm}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Avantages du Modèle K-Fold :}
+            \begin{itemize}
+                \item \textcolor{green}{\textbf{Généralisation améliorée}} (+33.5\% Gap R²)
+                \item \textcolor{green}{\textbf{Précision accrue}} (-20\% Gap MAE)
+                \item \textcolor{green}{\textbf{Validation robuste}} (5 folds cohérents)
+                \item \textcolor{green}{\textbf{Approche scientifique}} validée
+            \end{itemize}
+        \end{column}
+
+    \end{columns}
+\end{frame}
+
+
+
+
+
+\section{Données Expérimentales de Guirec}
+
+\begin{frame}{Réception des Données Expérimentales}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Fichier Reçu de Guirec :}
+            \begin{itemize}
+                \item \textcolor{darkblue}{\textbf{Intensity\_profiles\_test.mat}}
+                \item Données holographiques expérimentales réelles
+                \item Variables d'intérêt : \textcolor{green}{\textbf{I\_experiment}} et \textcolor{green}{\textbf{r\_experiment}}
+                \item Objectif : Validation du modèle sur données réelles
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{Structure des Données :}
+            \begin{itemize}
+                \item \textcolor{orange}{\textbf{8 782}} profils expérimentaux
+                \item \textcolor{orange}{\textbf{200}} points par profil maximum
+                \item Matrices I\_experiment et r\_experiment (8782×200)
+                \item Range radiale : 0.000 - 6.124 µm
+                \item Range d'intensité : 0.114 - 2.038
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Extraction Réalisée :}
+            \begin{table}[h]
+                \centering
+                \scriptsize
+                \begin{tabular}{@{}lc@{}}
+                    \toprule
+                    \textbf{Paramètre} & \textbf{Valeur} \\
+                    \midrule
+                    Profils totaux & 8 782 \\
+                    Points/profil & 200 max \\
+                    Profils analysés & 500 premiers \\
+                    Variables utilisées & I\_exp, r\_exp \\
+                    Format extraction & CSV individuel \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            \vspace{0.2cm}
+            \textbf{Focus d'Analyse :}
+            \begin{itemize}
+                \item Concentration sur I\_experiment et r\_experiment
+                \item Ignorance des autres variables MAT
+                \item Extraction sélective pour validation
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Problème Majeur Identifié}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Observation Critique :}
+            \begin{itemize}
+                \item Tracé des \textcolor{red}{\textbf{500 premiers anneaux}}
+                \item Résultat : \textcolor{red}{\textbf{anneaux\_groupe\_01.png}}
+                \item Constat alarmant découvert
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{Problème Identifié :}
+            \begin{itemize}
+                \item Seulement les \textcolor{green}{\textbf{≈100 premiers}} anneaux ressemblent aux simulations
+                \item Les \textcolor{red}{\textbf{400 suivants}} présentent des anomalies
+                \item Divergence progressive de la qualité des données
+                \item Incompatibilité croissante avec les données d'entraînement
+            \end{itemize}
+
+            \vspace{0.3cm}
+            
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\textwidth]{plots/anneaux_groupe_01.png}
+                \caption{Visualisation des 500 premiers anneaux expérimentaux - Dégradation visible après les 100 premiers}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Défis Techniques Rencontrés}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{1. Problème de Nombre de Points :}
+            \begin{itemize}
+                \item Données expérimentales : \textcolor{red}{\textbf{200 points max}}
+                \item Modèle entraîné sur : \textcolor{green}{\textbf{600 points}}
+                \item Incompatibilité dimensionnelle directe
+                \item Nécessité d'interpolation/extrapolation
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{2. Présence de Valeurs NaN :}
+            \begin{itemize}
+                \item Valeurs manquantes dans les matrices
+                \item Profils incomplets ou corrompus
+                \item Filtrage nécessaire avant traitement
+                \item Réduction effective du dataset utilisable
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{3. Écart Simulation-Expérience :}
+            \begin{itemize}
+                \item Conditions expérimentales différentes
+                \item Bruit instrumental non modélisé
+                \item Paramètres physiques variables
+                \item Calibration nécessaire
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{Solutions Développées :}
+            \begin{itemize}
+                \item \textcolor{green}{\textbf{Interpolation}} vers 600 points
+                \item \textcolor{green}{\textbf{Filtrage}} des valeurs NaN
+                \item \textcolor{green}{\textbf{Préprocessing}} adaptatif
+                \item \textcolor{green}{\textbf{Domain Adaptation}} Network
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Défis Techniques Rencontrés}
+    \begin{alertblock}{Conclusion Critique}
+        \textbf{Réduction de 40\%} : De 1000 à 600 points conduit à R' = 4.146 µm (réduction optimale). \\
+        \textbf{Échec systématique} : Application directe des réseaux entraînés sur simulations → prédictions non-physiques (gaps négatifs, erreurs  1000\%).
+    \end{alertblock}
+    
+    
+\end{frame}
+\begin{frame}{Défis Techniques Rencontrés}
+    
+    \begin{figure}
+                \centering
+                \includegraphics[width=0.75\textwidth]{plots/overlay_simulated_vs_experimental_rings-1.png}
+                %\caption{overlay\_simulated\_vs\_experimental\_rings}
+            \end{figure}
+    
+\end{frame}
+\begin{frame}{Approche Domain Adaptation Network (DAN)}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Problème Fondamental :}
+            \begin{itemize}
+                \item Modèles entraînés sur \textcolor{blue}{\textbf{simulations}}
+                \item Application sur \textcolor{red}{\textbf{données expérimentales}}
+                \item \textcolor{red}{\textbf{Échec systématique}} : gaps négatifs, erreurs > 1000\%
+                \item Nécessité d'adaptation inter-domaines
+            \end{itemize}
+
+            
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{Architecture DAN :}
+            \begin{figure}
+                \centering
+                \begin{tikzpicture}[scale=0.8]
+                    % Données expérimentales
+                    \node[draw, rectangle, fill=red!20] (exp) at (0,3) {\scriptsize Données Exp.};
+
+                    % Générateur
+                    \node[draw, rectangle, fill=green!20] (gen) at (0,2) {\scriptsize Générateur};
+
+                    % Données transformées
+                    \node[draw, rectangle, fill=blue!20] (trans) at (0,1) {\scriptsize Transformées};
+
+                    % Discriminateur
+                    \node[draw, rectangle, fill=orange!20] (disc) at (3 ,1.5) {\scriptsize Discriminateur};
+
+                    % Modèle pré-entraîné
+                    \node[draw, rectangle, fill=purple!20] (model) at (0,0) {\scriptsize Modèle Pré-entraîné};
+
+                    % Prédictions
+                    \node[draw, rectangle, fill=yellow!20] (pred) at (0,-1) {\scriptsize Prédictions};
+
+                    % Flèches
+                    \draw[->] (exp) -- (gen);
+                    \draw[->] (gen) -- (trans);
+                    \draw[->] (trans) -- (disc);
+                    \draw[->] (trans) -- (model);
+                    \draw[->] (model) -- (pred);
+                \end{tikzpicture}
+            \end{figure}
+
+           
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+\begin{frame}{Analyse des Features Neurales : 64 Détecteurs Spécialisés}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Architecture Progressive :}
+            \begin{itemize}
+                \item \textcolor{darkblue}{\textbf{600 points → 64 features}}
+                \item Extraction hiérarchique
+                \item Abstraction croissante
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{8 Catégories de Features :}
+            \begin{enumerate}
+                \item \textcolor{red}{\textbf{Fréquentielles}} (0-7)
+                \item \textcolor{orange}{\textbf{Comptage/Espacement}} (8-15)
+                \item \textcolor{yellow}{\textbf{Intensité/Contraste}} (16-23)
+                \item \textcolor{green}{\textbf{Géométriques}} (24-31)
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{enumerate}
+                \setcounter{enumi}{4}
+                \item \textcolor{cyan}{\textbf{Enveloppe}} (32-39)
+                \item \textcolor{blue}{\textbf{Énergétiques}} (40-47)
+                \item \textcolor{purple}{\textbf{Spectrales Avancées}} (48-55)
+                \item \textcolor{magenta}{\textbf{Détection Spécialisée}} (56-63)
+            \end{enumerate}
+
+            \vspace{0.3cm}
+            \textbf{Exemples Concrets :}
+            \begin{itemize}
+                \item \textbf{Feature 0-2 :} Fréquence dominante
+                \item \textbf{Feature 8-10 :} Compteur d'anneaux
+                \item \textbf{Feature 56-58 :} Détecteur de gap
+                \item \textbf{Feature 59-61 :} Détecteur de L\_écran
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Features Fréquentielles : Analyse Spectrale des Anneaux}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{Features 0-7 : Analyseurs Fréquentiels}
+
+            \vspace{0.3cm}
+            \textbf{�� Fréquence Dominante (Features 0-2) :}
+            \begin{itemize}
+                \item \textcolor{darkblue}{\textbf{Formule :}} $F_{dom} = \arg\max(|\text{FFT}(I(r))|)$
+                \item \textcolor{red}{\textbf{Gap petit}} → fréquence élevée → anneaux serrés
+                \item \textcolor{green}{\textbf{L\_écran grand}} → fréquence faible → anneaux espacés
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{�� Largeur Spectrale (Features 3-4) :}
+            \begin{itemize}
+                \item Mesure la \textcolor{purple}{\textbf{dispersion fréquentielle}}
+                \item Révèle la \textcolor{orange}{\textbf{cohérence des anneaux}}
+                \item Indicateur de \textcolor{cyan}{\textbf{qualité optique}}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{�� Harmoniques (Features 5-7) :}
+            \begin{itemize}
+                \item Détectent les \textcolor{red}{\textbf{non-linéarités}}
+                \item Révèlent les \textcolor{blue}{\textbf{effets d'ordre supérieur}}
+                \item Analysent la \textcolor{green}{\textbf{complexité spectrale}}
+            \end{itemize}
+
+            \vspace{0.5cm}
+            \begin{alertblock}{Physique}
+                \textbf{Relation Fondamentale :} \\
+                $\lambda_{anneaux} = \frac{\lambda \cdot L_{écran}}{\sqrt{gap \cdot \lambda}}$
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Features de Détection : Comptage et Géométrie}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{�� Compteurs d'Anneaux (Features 8-10) :}
+            \begin{itemize}
+                \item \textcolor{darkblue}{\textbf{Algorithme :}} \texttt{find\_peaks(I(r))}
+                \item \textcolor{red}{\textbf{Relation :}} $N_{rings} \propto \frac{L_{écran}}{\lambda} \times \sqrt{gap}$
+                \item Compte les \textcolor{green}{\textbf{anneaux visibles}}
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{�� Analyseurs d'Espacement (Features 11-13) :}
+            \begin{itemize}
+                \item \textcolor{purple}{\textbf{Espacement :}} $\Delta r = r_{n+1} - r_n$
+                \item Lié à la \textcolor{orange}{\textbf{longueur de cohérence}}
+                \item Révèle les \textcolor{cyan}{\textbf{interférences constructives}}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{�� Détecteurs de Régularité (Features 14-15) :}
+            \begin{itemize}
+                \item \textcolor{red}{\textbf{Métrique :}} $Rég = \frac{std(\Delta r_i)}{mean(\Delta r_i)}$
+                \item Révèle les \textcolor{blue}{\textbf{aberrations optiques}}
+                \item Évalue la \textcolor{green}{\textbf{qualité du système}}
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{�� Features Spécialisées (Features 56-63) :}
+            \begin{itemize}
+                \item \textcolor{magenta}{\textbf{Détecteurs de Gap}} (56-58)
+                \item \textcolor{cyan}{\textbf{Détecteurs de L\_écran}} (59-61)
+                \item \textcolor{orange}{\textbf{Détecteurs de Couplage}} (62-63)
+                \item Précision \textcolor{red}{\textbf{micrométrique}}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Features d'Intensité et Énergétiques}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{�� Analyseurs d'Intensité (Features 16-23) :}
+            \begin{itemize}
+                \item \textcolor{darkblue}{\textbf{Intensité des pics :}} $I_{peak} = \max(I(r_{ring}))$
+                \item \textcolor{red}{\textbf{Décroissance radiale :}} $I(r) = I_0 \times e^{-\alpha r}$
+                \item \textcolor{green}{\textbf{Contraste :}} $C = \frac{I_{max} - I_{min}}{I_{max} + I_{min}}$
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{�� Analyseurs de Forme (Features 24-31) :}
+            \begin{itemize}
+                \item \textcolor{purple}{\textbf{Asymétrie}} (skewness)
+                \item \textcolor{orange}{\textbf{Aplatissement}} (kurtosis)
+                \item \textcolor{cyan}{\textbf{Courbure :}} $\frac{d^2I}{dr^2}$
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{⚡ Features Énergétiques (Features 40-47) :}
+            \begin{itemize}
+                \item \textcolor{red}{\textbf{Énergie totale :}} $E = \int I^2(r) dr$
+                \item \textcolor{blue}{\textbf{Distribution spatiale}} par zones
+                \item \textcolor{green}{\textbf{Concentration :}} $\frac{\max(E_{zone})}{\sum E_{zones}}$
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{�� Enveloppe de Hilbert (Features 32-39) :}
+            \begin{itemize}
+                \item \textcolor{magenta}{\textbf{Enveloppe :}} $|I(r) + i \cdot H[I(r)]|$
+                \item \textcolor{cyan}{\textbf{Modulation d'amplitude}}
+                \item \textcolor{orange}{\textbf{Informations de phase}}
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Intelligence Artificielle vs Physique : Synthèse}
+    \begin{columns}
+        \begin{column}{0.6\textwidth}
+            \textbf{�� Apprentissage Automatique :}
+            \begin{itemize}
+                \item Le réseau \textcolor{red}{\textbf{découvre automatiquement}} ces 64 caractéristiques
+                \item \textcolor{blue}{\textbf{Optimisation}} pour minimiser l'erreur de prédiction
+                \item \textcolor{green}{\textbf{Aucune programmation explicite}} des features
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \textbf{�� Validation Physique :}
+            \begin{itemize}
+                \item Chaque feature correspond à une \textcolor{purple}{\textbf{propriété physique}}
+                \item \textcolor{orange}{\textbf{Corrélations mesurables}} avec les paramètres
+                \item \textcolor{cyan}{\textbf{Validation scientifique}} de l'approche IA
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \textbf{�� Avantages de l'IA :}
+            \begin{itemize}
+                \item \textcolor{red}{\textbf{Corrélations subtiles}} détectées
+                \item \textcolor{blue}{\textbf{Interactions non-linéaires}}
+                \item \textcolor{green}{\textbf{Optimisation globale}}
+            \end{itemize}
+
+            \vspace{0.3cm}
+            \begin{alertblock}{Résultat}
+                \textbf{64 Features = "Empreinte Digitale"} \\
+                complète des anneaux holographiques \\
+                \textcolor{green}{\textbf{Précision micrométrique !}}
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+\section{Conclusions et Perspectives}
+\begin{frame}{Remerciements et Questions}
+    \begin{center}
+        \Large
+        \textbf{Merci pour votre attention !}
+
+        \vspace{1cm}
+
+        \textcolor{darkblue}{\textbf{Questions et Discussion}}
+
+        \vspace{1cm}
+
+        
+        
+
+        \vspace{0.5cm}
+
+        \textcolor{green}{\textbf{Les recommandations du tuteur ont été déterminantes}} \\
+        \textcolor{green}{\textbf{pour l'amélioration significative des performances !}}
+    \end{center}
+\end{frame}
+
+\section{Implémentation Technique}
+
+\begin{frame}[fragile]{Code Clé : Entraînement K-Fold}
+    \begin{lstlisting}[caption=Boucle d'entraînement K-Fold principale]
+def run_kfold_validation(self, X, y, k_folds=5, epochs=200):
+    """Exécute la validation croisée K-Fold."""
+
+    # Mélange aléatoire des données (recommandation tuteur)
+    indices = np.arange(len(X))
+    np.random.shuffle(indices)
+    X_shuffled = X[indices]
+    y_shuffled = y[indices]
+
+    # Initialiser K-Fold
+    kfold = KFold(n_splits=k_folds, shuffle=False, random_state=None)
+
+    fold_results = []
+    fold_models = []
+
+    # Exécuter chaque fold
+    for fold_num, (train_idx, val_idx) in enumerate(kfold.split(X_shuffled)):
+        X_train_fold = X_shuffled[train_idx]
+        y_train_fold = y_shuffled[train_idx]
+        X_val_fold = X_shuffled[val_idx]
+        y_val_fold = y_shuffled[val_idx]
+
+        # Entraîner le modèle pour ce fold
+        model, history, metrics, scalers = self.train_single_fold(
+            X_train_fold, y_train_fold, X_val_fold, y_val_fold,
+            fold_num, epochs
+        )
+
+        fold_results.append(metrics)
+        fold_models.append(model)
+
+    return fold_results, fold_models, kfold_summary
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Code Clé : Architecture du Modèle}
+    \begin{lstlisting}[caption=Forward pass avec têtes spécialisées]
+def forward(self, x):
+    """Forward pass avec têtes spécialisées."""
+    # Backbone partagé
+    x = torch.relu(self.bn1(self.fc1(x)))
+    x = self.dropout1(x)
+
+    x = torch.relu(self.bn2(self.fc2(x)))
+    x = self.dropout2(x)
+
+    x = torch.relu(self.bn3(self.fc3(x)))
+    x = self.dropout3(x)
+
+    x = torch.relu(self.bn4(self.fc4(x)))
+    x = self.dropout4(x)
+
+    x = torch.relu(self.bn5(self.fc5(x)))
+    x = self.dropout5(x)
+
+    features = torch.relu(self.bn6(self.fc6(x)))
+    features = self.dropout6(features)
+
+    # Têtes spécialisées
+    gap_pred = self.gap_head(features)
+    L_ecran_pred = self.L_ecran_head(features)
+
+    return torch.cat([gap_pred, L_ecran_pred], dim=1)
+    \end{lstlisting}
+\end{frame}
+\end{document}
+

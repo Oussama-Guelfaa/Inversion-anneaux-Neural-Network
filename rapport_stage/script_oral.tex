@@ -1,0 +1,148 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+
+\geometry{margin=2cm}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Script Oral - Présentation Réseaux de Neurones Holographiques}
+\fancyhead[R]{Oussama GUELFAA}
+\fancyfoot[C]{\thepage}
+
+\definecolor{darkblue}{RGB}{0,51,102}
+\definecolor{green}{RGB}{0,153,51}
+\definecolor{red}{RGB}{220,20,60}
+
+\title{\textbf{Script Oral pour Présentation} \\ 
+       \large Développement d'un Réseau de Neurones pour l'Analyse d'Anneaux Holographiques}
+\author{Oussama GUELFAA}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Instructions d'Utilisation}
+\textcolor{darkblue}{\textbf{Ce script fournit les points clés à mentionner pour chaque slide. Parlez naturellement en vous appuyant sur ces éléments essentiels.}}
+
+\vspace{0.5cm}
+
+\section{Slide 1 : Page de Titre}
+\textbf{Durée : 30 secondes}
+
+Bonjour à tous. Je vais vous présenter mon travail de stage sur le développement d'un réseau de neurones pour l'analyse d'anneaux holographiques. L'objectif principal était de prédire avec précision deux paramètres physiques critiques : le gap et la distance L\_écran, en utilisant une approche de validation croisée K-Fold.
+
+\section{Slide 2 : Plan de la Présentation}
+\textbf{Durée : 30 secondes}
+
+Ma présentation s'articule autour de six points principaux : d'abord le contexte et la problématique, puis l'architecture du réseau de neurones que j'ai développée, la méthodologie de validation croisée K-Fold, les résultats obtenus, les défis rencontrés avec les données expérimentales de Guirec, et enfin les conclusions et perspectives.
+
+\section{Slide 3 : Contexte - Analyse d'Anneaux Holographiques}
+\textbf{Durée : 1 minute 30}
+
+Le problème scientifique consiste à prédire deux paramètres physiques critiques à partir de profils d'intensité holographiques. Le \textcolor{darkblue}{\textbf{gap}} représente l'épaisseur entre surfaces en micromètres, et \textcolor{darkblue}{\textbf{L\_écran}} la distance écran-objet. La précision requise est très élevée : plus ou moins 0.01 micromètre pour le gap et plus ou moins 0.5 micromètre pour L\_écran.
+
+En entrée, j'utilise des profils d'intensité holographiques 1D de 600 points, qui correspondent au ratio normalisé I\_subs sur I\_subs\_inc. Comme vous pouvez le voir sur la figure, ces profils présentent des oscillations caractéristiques des anneaux holographiques.
+
+\section{Slide 4 : Dataset et Préparation des Données}
+\textbf{Durée : 1 minute}
+
+J'ai travaillé avec un dataset 2D complet comprenant \textcolor{green}{\textbf{55 200}} échantillons d'entraînement et \textcolor{green}{\textbf{1 840}} échantillons de test. Le dataset couvre 40 valeurs de gap de 0.005 à 0.2 micromètres et 61 valeurs de L\_écran de 10.0 à 11.5 micromètres.
+
+Pour le préprocessing, j'ai appliqué une troncature à 600 points, un filtrage gaussien, une normalisation avec StandardScaler et MinMaxScaler, et surtout un split aléatoire comme recommandé par mon tuteur. L'augmentation de données a été réalisée par interpolation.
+
+\section{Slide 5 : Architecture ImprovedDualParameterNet}
+\textbf{Durée : 1 minute 30}
+
+L'architecture que j'ai développée est basée sur un \textcolor{darkblue}{\textbf{backbone partagé}} qui va de 600 entrées vers 64 features, en passant par 1024, 768, 512, 256, et 128 neurones. Ensuite, j'utilise des \textcolor{red}{\textbf{têtes spécialisées}} : une pour le gap qui est plus complexe avec trois couches, et une pour L\_écran qui est simplifiée avec deux couches.
+
+Les innovations clés incluent une loss pondérée avec un facteur 15 pour le gap et 1 pour L\_écran, un dropout décroissant de 0.15 à 0.06, et un early stopping par fold. Cette asymétrie dans les têtes reflète le fait que le gap est plus difficile à prédire.
+
+\section{Slide 6 : Loss Function et Optimisation}
+\textbf{Durée : 1 minute}
+
+J'ai développé une loss pondérée personnalisée qui privilégie la précision du gap avec un poids de 15, car c'est le paramètre le plus critique et le plus difficile à prédire. La configuration d'entraînement utilise l'optimiseur AdamW avec un learning rate de 0.0005, un scheduler ReduceLROnPlateau, et un gradient clipping pour la stabilité.
+
+Le poids gap fois 15 se justifie par la tolérance plus stricte requise et l'impact critique sur la précision globale.
+
+\section{Slide 7 : Méthodologie K-Fold Cross-Validation}
+\textbf{Durée : 1 minute}
+
+J'ai appliqué les trois recommandations principales de mon tuteur : utiliser un split aléatoire au lieu de stratifié, implémenter une validation croisée K-Fold pour une évaluation robuste, et optimiser l'utilisation du dataset de 55 200 échantillons.
+
+L'implémentation K-Fold utilise 5 folds avec un mélange aléatoire initial, des scalers indépendants par fold, un early stopping individuel, et la sauvegarde du meilleur fold.
+
+\section{Slide 8 : Résultats de la Validation Croisée}
+\textbf{Durée : 1 minute 30}
+
+Les résultats montrent une performance moyenne de 0.556 pour le Gap R² et 0.989 pour L\_écran R². Le fold 1 a été sélectionné comme le meilleur avec un Gap R² de 0.624 et un Gap MAE de 0.0375 micromètres. 
+
+La variance est acceptable avec plus ou moins 0.097 pour le Gap R² et très stable pour L\_écran avec plus ou moins 0.003. La convergence est rapide avec une moyenne de 78 epochs, et aucun overfitting n'a été détecté.
+
+\section{Slide 9 : Performances sur Dataset de Test}
+\textbf{Durée : 1 minute}
+
+Sur le test final de 1 840 échantillons, j'ai obtenu un Gap R² de \textcolor{green}{\textbf{0.644}} et un L\_écran R² de \textcolor{green}{\textbf{0.991}}. Le Gap MAE est de 0.0365 micromètres et 52.3% des prédictions sont dans la tolérance de plus ou moins 0.01 micromètre.
+
+Le point remarquable est la cohérence entre K-Fold et test : le Gap R² passe de 0.556 à 0.644, soit une amélioration de 15.8%, démontrant une \textcolor{green}{\textbf{généralisation excellente}}.
+
+\section{Slide 10 : Exemples de Prédictions Remarquables}
+\textbf{Durée : 45 secondes}
+
+J'ai obtenu 10 prédictions parfaites avec une erreur inférieure à 0.0001 micromètre. Par exemple, pour le fichier gap\_0.0850um\_L\_5.125um, la prédiction est exactement 0.0850, identique à la valeur réelle. 68.6% des prédictions sont dans la tolérance de plus ou moins 0.02 micromètre, avec une médiane d'erreur de seulement 0.0093 micromètre.
+
+\section{Slide 11 : Comparaison Modèle K-Fold vs Modèle Amélioré}
+\textbf{Durée : 1 minute}
+
+L'impact des recommandations du tuteur est spectaculaire : le Gap R² passe de 0.482 à 0.644, soit une amélioration de 33.5%. Le Gap MAE diminue de 20%, passant de 0.0456 à 0.0365 micromètres.
+
+Les avantages du modèle K-Fold incluent une généralisation améliorée, une précision accrue, une validation robuste avec 5 folds cohérents, et une approche scientifique validée.
+
+\section{Slide 12 : Réception des Données Expérimentales}
+\textbf{Durée : 1 minute}
+
+Guirec m'a fourni le fichier \textcolor{darkblue}{\textbf{Intensity\_profiles\_test.mat}} contenant 8 782 profils expérimentaux avec 200 points maximum par profil. Je me suis concentré sur les variables I\_experiment et r\_experiment pour valider le modèle sur des données réelles.
+
+L'extraction a porté sur les 500 premiers profils pour une analyse approfondie, avec une sauvegarde en format CSV individuel.
+
+\section{Slide 13 : Problème Majeur Identifié}
+\textbf{Durée : 1 minute}
+
+En traçant les 500 premiers anneaux, j'ai découvert un problème critique : seulement les 100 premiers anneaux ressemblent aux simulations. Les 400 suivants présentent des anomalies avec une divergence progressive de la qualité des données.
+
+Cette observation limite considérablement le dataset utilisable et nécessite une sélection rigoureuse pour la validation.
+
+\section{Slide 14-15 : Défis Techniques Rencontrés}
+\textbf{Durée : 1 minute 30}
+
+J'ai rencontré trois défis majeurs : d'abord, un problème de nombre de points avec 200 points expérimentaux contre 600 pour le modèle entraîné. Ensuite, la présence de valeurs NaN nécessitant un filtrage. Enfin, l'écart entre simulation et expérience avec des conditions différentes.
+
+L'application directe des réseaux entraînés sur simulations a échoué systématiquement avec des prédictions non-physiques : gaps négatifs et erreurs supérieures à 1000%.
+
+\section{Slide 16 : Approche Domain Adaptation Network}
+\textbf{Durée : 1 minute}
+
+Pour résoudre ce problème fondamental, j'ai développé un Domain Adaptation Network basé sur une architecture adversariale GAN. Le principe est de transformer les caractéristiques des données expérimentales pour les aligner sur l'espace latent des simulations.
+
+Cette approche permet d'utiliser directement les modèles pré-entraînés sans nécessiter un ré-entraînement complet.
+
+\section{Slide 17-20 : Analyse des Features Neurales}
+\textbf{Durée : 2 minutes}
+
+Le réseau extrait automatiquement 64 features spécialisées organisées en 8 catégories : fréquentielles, comptage, intensité, géométriques, enveloppe, énergétiques, spectrales avancées, et détection spécialisée.
+
+Par exemple, les features 0-2 analysent la fréquence dominante des anneaux, les features 8-10 comptent les anneaux, et les features 56-63 sont des détecteurs spécialisés pour le gap et L\_écran. Chaque feature correspond à une propriété physique mesurable, validant scientifiquement l'approche IA.
+
+\section{Slide 21 : Remerciements et Questions}
+\textbf{Durée : 30 secondes}
+
+En conclusion, les recommandations de mon tuteur ont été déterminantes pour l'amélioration significative des performances. Le modèle K-Fold démontre une généralisation excellente avec des résultats qui dépassent les attentes initiales.
+
+Je vous remercie pour votre attention et je suis maintenant disponible pour répondre à vos questions.
+
+\end{document}

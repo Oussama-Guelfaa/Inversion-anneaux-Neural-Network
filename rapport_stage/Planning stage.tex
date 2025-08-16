@@ -1,0 +1,153 @@
+% Plan de stage détaillé — 2 mois (40 journées)
+% Auteur : généré par ChatGPT, 2025-05-30
+% -----------------------------------------------------------------------------
+\documentclass[11pt,a4paper]{article}
+
+% -----------------------------------------------------------------------------
+% ---------------------------- Packages utiles --------------------------------
+\usepackage[utf8]{inputenc}   % Encodage des caractères
+\usepackage[T1]{fontenc}      % Encodage des fontes
+\usepackage[french]{babel}    % Typographie française
+\usepackage{geometry}         % Marges
+\geometry{margin=2.5cm}
+\usepackage{xcolor}           % Couleurs
+\usepackage{graphicx}         % Inclus. d'images (si besoin)
+\usepackage{longtable}        % Tables sur plusieurs pages
+\usepackage{booktabs}         % Lignes horizontales de qualité dans les tables
+\usepackage{tabularx}         % Colonnes à largeur automatique X
+\usepackage{array}            % Améliorations du tableau
+\usepackage{enumitem}         % Listes personnalisées
+\usepackage{hyperref}         % Liens cliquables
+\hypersetup{colorlinks=true,
+            linkcolor=blue,
+            urlcolor=blue,
+            pdfauthor={Plan de stage IA holographie},
+            pdftitle={Plan de travail détaillé — stage 2 mois}}
+% -----------------------------------------------------------------------------
+
+\setlist[description]{leftmargin=2.5cm,labelindent=0cm,font=\bfseries}
+
+% -----------------------------------------------------------------------------
+% --------------------------- Début du document -------------------------------
+\begin{document}
+
+\title{Plan de travail détaillé\\\large Stage de 2 mois – Inversion par réseaux de neurones d'hologrammes Lorenz--Mie}
+\author{\small Organisation : \emph{شركة الدجاج شركة واقفة}\\Encadrant : \emph{(à préciser)}\\Stagiaire : \emph{(ton nom)}}
+\date{\today}
+\maketitle
+
+\tableofcontents
+\bigskip
+
+% -----------------------------------------------------------------------------
+\section*{Vue synthétique des objectifs}
+\addcontentsline{toc}{section}{Vue synthétique des objectifs}
+
+\begin{center}
+\begin{tabularx}{\linewidth}{>{\bfseries}c X}
+\toprule
+Semaine & Objectif--clé atteint le vendredi soir \\
+\midrule
+1 & Comprendre la physique et installer l'environnement de développement \\
+2 & Disposer d'un \emph{simulateur Lorenz--Mie} prêt, incluant bruit réaliste \\
+3 & Générer un \textbf{jeu d'entraînement} (\(\sim\) 100 k images étiquetées) \\
+4 & Obtenir un \emph{premier réseau} convergent (RMSE~$<3\,$nm sur $z$ synthétique) \\
+5 & Réseau optimisé (data--aug, hyperparams), RMSE~$<1\,$nm \\
+6 & Pipeline complet pré--traitement~+~inférence sur données réelles \\
+7 & Validation expérimentale vs fit classique, analyse des erreurs \\
+8 & Livraison : code nettoyé, rapport, diapos, perspectives \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\bigskip
+
+% -----------------------------------------------------------------------------
+\section*{Calendrier journée par journée}
+\addcontentsline{toc}{section}{Calendrier journée par journée}
+
+\subsection*{Semaine 1 — On board \& fondamentaux}
+\begin{description}
+  \item[Lundi] Lecture intégrale des diapositives \emph{Discussion\_Stage\_OG}, installation Python 3.11, PyTorch 2.x + CUDA. Cloner le dépôt de référence \texttt{Pylorenzmie} et exécuter le notebook d'exemple.
+  \item[Mardi] Révision de l'optique Lorenz--Mie (Bohren \& Huffman). Relecture de l'article PNAS pour comprendre les paramètres mesurés.
+  \item[Mercredi] Codage propre des équations directes : pour \((a, n_p, x, y, z)\), produire \(I(x,y)\,256\times256\). Benchmark CPU vs GPU.
+  \item[Jeudi] Implémentation des fonctions de bruit réaliste : \emph{shot noise}, dérive d'illumination (méthode du fond médian).
+  \item[Vendredi] Rédaction d'un cahier de recettes : conventions d'unités, gammes de paramètres \(a\in[1.4,1.8]\,\mu\text{m}\), \(z\in[0,5]\,\mu\text{m}\), \(n_p\in[1.45,1.48]\).
+\end{description}
+
+\subsection*{Semaine 2 — Générateur de données synthétiques}
+\begin{description}
+  \item[Lundi] Boucle d'échantillonnage uniforme de l'espace des paramètres ; sauvegarde des images et labels (\texttt{.pt}).
+  \item[Mardi] Ajout d'augmentations : rotation, translation sous--pixel.
+  \item[Mercredi] Génération de 80\,k images d'entraînement et 20\,k de validation (\(\sim2\,$h GPU).
+  \item[Jeudi] Écriture des \textit{dataloaders} PyTorch (normalisation en ligne).
+  \item[Vendredi] Validation : vérification que l'inversion par \emph{fit} classique récupère correctement les labels sur 100 images test (baseline).
+\end{description}
+
+\subsection*{Semaine 3 — Infrastructure \& métriques}
+\begin{description}
+  \item[Lundi] Définition des métriques : MAE (nm) sur $z$, $a$ ; $10^{-3}$ sur $n_p$ ; $\mu$m sur $x,y$.
+  \item[Mardi] Construction d'un notebook d'évaluation automatique.
+  \item[Mercredi] Test de trois architectures : CNN simple, ResNet--18, EfficientNet--B0.
+  \item[Jeudi] Choix du meilleur \emph{backbone} (critère : vitesse + précision).
+  \item[Vendredi] Lancement d'une \emph{grid--search} (learning rate / batch size) pendant la nuit.
+\end{description}
+
+\subsection*{Semaine 4 — Premier réseau fonctionnel}
+\begin{description}
+  \item[Lundi] Analyse des résultats de la grid--search, fixation des hyperparamètres.
+  \item[Mardi] Implémentation d'un scheduler cosinus et du \emph{early--stopping}.
+  \item[Mercredi] Atteinte d'un RMSE~$<3\,$nm sur $z$ (validation).
+  \item[Jeudi] Visualisation régression vs vérité, détection des biais systémiques.
+  \item[Vendredi] Rédaction de la note d'étape n°1 (\~5 pages).
+\end{description}
+
+\subsection*{Semaine 5 — Optimisation avancée}
+\begin{description}
+  \item[Lundi] Data--augmentation physiques : jitter d'intensité, flou gaussien.
+  \item[Mardi] Perte pondérée (poids renforcé sur $z$).
+  \item[Mercredi] Affinage ; objectif RMSE~$<1\,$nm sur $z$ et 0.5\,\% sur $n_p$.
+  \item[Jeudi] Quantification de l'incertitude par \emph{MC dropout}.
+  \item[Vendredi] Préparation de l'export : script ONNX pour inférence temps réel.
+\end{description}
+
+\subsection*{Semaine 6 — Passage aux données expérimentales}
+\begin{description}
+  \item[Lundi] Récupération de 10\,k hologrammes expérimentaux (collaborateurs).
+  \item[Mardi] Écriture du pipeline de pré--traitement : \emph{background median}, centrage, redimensionnement.
+  \item[Mercredi] Application du réseau ; collecte des prédictions.
+  \item[Jeudi] Comparaison aux valeurs issues du \emph{fit} Lorenz--Mie classique (résolution 20 nm).
+  \item[Vendredi] Identification des écarts systématiques ; décision éventuelle de \emph{fine--tuning} (quelques 
+  epochs).
+\end{description}
+
+\subsection*{Semaine 7 — Validation \& analyse physique}
+\begin{description}
+  \item[Lundi] Calcul de la distribution des erreurs vs $z$ ; tracé du biais près de la paroi.
+  \item[Mardi] Test de robustesse au bruit réel (variation laser).
+  \item[Mercredi] Étude de sensibilité : importance de chaque paramètre d'entrée.
+  \item[Jeudi] Rédaction de la section « Résultats \& discussion » du rapport.
+  \item[Vendredi] Préparation des figures finales (plots \texttt{matplotlib}, schémas du setup).
+\end{description}
+
+\subsection*{Semaine 8 — Bouclage \& livraison}
+\begin{description}
+  \item[Lundi] Nettoyage du dépôt : \texttt{README}, docstrings, tests unitaires.
+  \item[Mardi] Rédaction du manuel utilisateur (\~3 pages).
+  \item[Mercredi] Création du diaporama 20 diapositives (Contexte → Méthode → Résultats → Ouvertures).
+  \item[Jeudi] Répétition de la soutenance orale (20 min + 10 min Q/R).
+  \item[Vendredi] Derniers commits, \texttt{tag v1.0} ; envoi des archives et du rapport (12--15 pages).
+\end{description}
+
+% -----------------------------------------------------------------------------
+\section*{Conseils d'organisation}
+\addcontentsline{toc}{section}{Conseils d'organisation}
+\begin{itemize}
+  \item \textbf{Time--boxing} : cycles de 45 min de concentration suivis de 10 min de pause (7 cycles par jour).
+  \item \textbf{Tests rapides} : exécuter une batterie \emph{pytest} (\(\leq\) 3 min) en fin de journée.
+  \item \textbf{Sauvegardes} quotidiennes : \emph{git push} sur dépôt distant.
+  \item \textbf{Point flash} de 15 min chaque matin avec l'encadrant pour lever les blocages.
+\end{itemize}
+
+% -----------------------------------------------------------------------------
+\end{document}
