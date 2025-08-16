@@ -49,9 +49,9 @@ def compile_latex(tex_file, max_runs=3):
         
         try:
             result = subprocess.run([
-                'pdflatex', 
+                'pdflatex',
                 '-interaction=nonstopmode',
-                '-output-directory=.',
+                f'-output-directory={DOCS_DIR}',
                 tex_file
             ], capture_output=True, text=True)
             
