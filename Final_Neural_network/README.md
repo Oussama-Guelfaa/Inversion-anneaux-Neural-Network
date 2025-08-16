@@ -5,9 +5,18 @@
 
 ## Overview
 
-This folder contains the processed simulation data for neural network training. The original MATLAB file has been processed to truncate the first 250 points from each intensity profile and saved in a compressed NumPy format for efficient loading.
+This module contains the finalized dataset, scripts, models, plots, and report for the holographic ring neural network pipeline. It is now organized into a clear structure to simplify usage and maintenance.
 
-## Files
+## Folder structure
+
+- data/processed: NPZ datasets (simulation, experimental, combined)
+- models: Trained model checkpoints (.pt)
+- plots: Generated visualizations (.png)
+- results: CSV/TXT results (predictions, histories, reports)
+- scripts: All Python scripts (training, processing, verification, visualization)
+- docs: LaTeX report and compilation helpers
+
+## Key datasets and scripts
 
 ### Data Files
 - `simulation_processed_truncate250_start.npz` - Processed simulation data (121.78 MB)
@@ -176,6 +185,23 @@ print(f"Training data: {X_data.shape[0]} samples")
 print(f"Gap range: {y_data[:, 0].min():.3f} to {y_data[:, 0].max():.3f} µm")
 print(f"L_ecran range: {y_data[:, 1].min():.3f} to {y_data[:, 1].max():.3f} µm")
 ```
+
+## How to run (examples)
+
+- Train domain-adaptive model (fixed):
+  python Final_Neural_network/scripts/domain_adaptive_model_fixed.py
+
+- Verify processed data:
+  python Final_Neural_network/scripts/verify_processed_data.py
+
+- Plot experimental vs closest simulation:
+  python Final_Neural_network/scripts/plot_experimental_vs_closest_simulation.py
+
+- Generate final visualization summary:
+  python Final_Neural_Network/scripts/final_visualization_summary.py
+
+- Compile LaTeX report:
+  python Final_Neural_network/scripts/compile_rapport.py
 
 ## Processing Scripts
 
