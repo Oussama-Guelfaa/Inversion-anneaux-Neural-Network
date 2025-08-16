@@ -24,6 +24,13 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+RESULTS_DIR = BASE_DIR / 'results'
+PLOTS_DIR = BASE_DIR / 'plots'
+MODELS_DIR = BASE_DIR / 'models'
 from typing import Tuple, Dict, List
 import warnings
 warnings.filterwarnings('ignore')
@@ -170,7 +177,7 @@ def load_and_preprocess_data():
     
     # Load simulation data
     print("Loading simulation data...")
-    sim_data = np.load('simulation_processed_with_labels.npz')
+    sim_data = np.load(str(DATA_DIR / 'simulation_processed_with_labels.npz'))
     X_sim = sim_data['X_data']  # (22540, 750)
     y_sim = sim_data['y_data']  # (22540, 2)
     
@@ -178,7 +185,7 @@ def load_and_preprocess_data():
     
     # Load experimental data
     print("Loading experimental data...")
-    exp_data = np.load('experimental_processed_interp_to_sim_grid.npz')
+    exp_data = np.load(str(DATA_DIR / 'experimental_processed_interp_to_sim_grid.npz'))
     X_exp = exp_data['X_data']  # (50, 750)
     
     print(f"Experimental data: X_exp {X_exp.shape}")
@@ -617,13 +624,13 @@ def save_results(model, history, evaluation_results, data_dict):
     })
 
     csv_path = 'experimental_predictions.csv'
-    predictions_df.to_csv(csv_path, index=False)
+    predictions_df.to_csv(RESULTS_DIR / csv_path, index=False)
     print(f"✓ Experimental predictions saved to: {csv_path}")
 
     # Save training history
     history_df = pd.DataFrame(history)
     history_path = 'training_history.csv'
-    history_df.to_csv(history_path, index=False)
+    history_df.to_csv(RESULTS_DIR / history_path, index=False)
     print(f"✓ Training history saved to: {history_path}")
 
     print(f"✓ All results saved successfully!")
@@ -713,7 +720,7 @@ def create_visualizations(history, evaluation_results, data_dict):
     exp_predictions = evaluation_results['exp_predictions']
 
     # Load original simulation data for comparison
-    sim_data = np.load('simulation_processed_with_labels.npz')
+    sim_data = np.load(str(DATA_DIR / 'simulation_processed_with_labels.npz'))
     y_sim_original = sim_data['y_data']
 
     ax5.hist(y_sim_original[:, 0], bins=50, alpha=0.6, label='Simulation (Training)',
@@ -742,7 +749,7 @@ def create_visualizations(history, evaluation_results, data_dict):
 
     # Save the comprehensive plot
     plot_path = 'domain_adaptive_training_results.png'
-    plt.savefig(plot_path, dpi=150, bbox_inches='tight')
+    plt.savefig(PLOTS_DIR / plot_path, dpi=150, bbox_inches='tight')
     print(f"✓ Comprehensive visualization saved to: {plot_path}")
 
     plt.close()
@@ -794,7 +801,7 @@ def create_experimental_predictions_plot(exp_predictions, sim_targets):
 
     # Save the experimental predictions plot
     exp_plot_path = 'experimental_predictions_analysis.png'
-    plt.savefig(exp_plot_path, dpi=150, bbox_inches='tight')
+    plt.savefig(PLOTS_DIR / exp_plot_path, dpi=150, bbox_inches='tight')
     print(f"✓ Experimental predictions plot saved to: {exp_plot_path}")
 
     plt.close()

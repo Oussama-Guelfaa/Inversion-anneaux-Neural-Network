@@ -10,6 +10,11 @@ Ce script compile le rapport de recherche LaTeX et génère le PDF final.
 import subprocess
 import os
 import sys
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+PLOTS_DIR = BASE_DIR / 'plots'
+DOCS_DIR = BASE_DIR / 'docs'
 
 def check_latex_installation():
     """Vérifier si LaTeX est installé."""
@@ -80,11 +85,11 @@ def clean_auxiliary_files(base_name):
 def check_images_exist():
     """Vérifier que toutes les images référencées existent."""
     required_images = [
-        'sim_vs_exp_profiles.png',
-        'domain_adaptive_results_fixed.png',
-        'experimental_vs_closest_simulation_profiles.png'
+        str(PLOTS_DIR / 'sim_vs_exp_profiles.png'),
+        str(PLOTS_DIR / 'domain_adaptive_results_fixed.png'),
+        str(PLOTS_DIR / 'experimental_vs_closest_simulation_profiles.png')
     ]
-    
+
     print("Vérification des images requises...")
     all_exist = True
     
@@ -99,9 +104,9 @@ def check_images_exist():
 
 def generate_summary():
     """Générer un résumé du rapport."""
-    tex_file = 'rapport_recherche_reseaux_neurones.tex'
-    pdf_file = 'rapport_recherche_reseaux_neurones.pdf'
-    
+    tex_file = str(DOCS_DIR / 'rapport_recherche_reseaux_neurones.tex')
+    pdf_file = str(DOCS_DIR / 'rapport_recherche_reseaux_neurones.pdf')
+
     print("\n" + "=" * 60)
     print("RÉSUMÉ DU RAPPORT GÉNÉRÉ")
     print("=" * 60)
@@ -152,8 +157,8 @@ def main():
     print("COMPILATION DU RAPPORT DE RECHERCHE LATEX")
     print("=" * 60)
     
-    tex_file = 'rapport_recherche_reseaux_neurones.tex'
-    
+    tex_file = str(DOCS_DIR / 'rapport_recherche_reseaux_neurones.tex')
+
     # Vérifications préliminaires
     if not os.path.exists(tex_file):
         print(f"✗ Fichier LaTeX non trouvé: {tex_file}")

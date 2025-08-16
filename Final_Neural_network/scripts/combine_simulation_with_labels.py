@@ -19,6 +19,10 @@ import numpy as np
 import pandas as pd
 import os
 import sys
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
 
 def load_simulation_data():
     """
@@ -27,8 +31,8 @@ def load_simulation_data():
     Returns:
         tuple: (X_data, x_positions) - intensity profiles and x-axis data
     """
-    sim_file = "simulation_processed_truncate250_start.npz"
-    
+    sim_file = DATA_DIR / "simulation_processed_truncate250_start.npz"
+
     if not os.path.exists(sim_file):
         print(f"Error: Simulation file not found: {sim_file}")
         sys.exit(1)
@@ -36,8 +40,8 @@ def load_simulation_data():
     print(f"Loading simulation data from: {sim_file}")
     
     try:
-        sim_data = np.load(sim_file)
-        
+        sim_data = np.load(str(sim_file))
+
         print("Available arrays in simulation file:")
         for key in sim_data.keys():
             print(f"  {key}: {sim_data[key].shape}")
@@ -160,8 +164,8 @@ def save_combined_data(X_data, x_positions, y_data):
         x_positions (numpy.ndarray): X-axis data
         y_data (numpy.ndarray): Labels
     """
-    output_file = "simulation_processed_with_labels.npz"
-    
+    output_file = DATA_DIR / "simulation_processed_with_labels.npz"
+
     print(f"Saving combined data to: {output_file}")
     
     try:

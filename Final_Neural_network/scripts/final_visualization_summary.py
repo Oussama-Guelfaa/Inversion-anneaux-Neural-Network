@@ -9,8 +9,14 @@ during the domain adaptive neural network analysis.
 """
 
 import os
+from pathlib import Path
 import pandas as pd
 import numpy as np
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+RESULTS_DIR = BASE_DIR / 'results'
+PLOTS_DIR = BASE_DIR / 'plots'
 
 def list_all_visualizations():
     """List all visualization files created."""
@@ -21,23 +27,23 @@ def list_all_visualizations():
     # Define visualization categories
     visualizations = {
         "🤖 Domain Adaptive Neural Network Results": [
-            "domain_adaptive_results_fixed.png",
-            "domain_adaptive_comprehensive_summary.png"
+            str(PLOTS_DIR / "domain_adaptive_results_fixed.png"),
+            str(PLOTS_DIR / "domain_adaptive_comprehensive_summary.png")
         ],
         "🔬 Experimental vs Simulation Profile Comparisons": [
-            "experimental_vs_closest_simulation_profiles.png",
-            "detailed_experimental_vs_simulation_comparison.png",
-            "sim_vs_exp_profiles.png",
-            "detailed_sim_vs_exp_comparison.png",
-            "ring_structure_comparison.png"
+            str(PLOTS_DIR / "experimental_vs_closest_simulation_profiles.png"),
+            str(PLOTS_DIR / "detailed_experimental_vs_simulation_comparison.png"),
+            str(PLOTS_DIR / "sim_vs_exp_profiles.png"),
+            str(PLOTS_DIR / "detailed_sim_vs_exp_comparison.png"),
+            str(PLOTS_DIR / "ring_structure_comparison.png")
         ],
         "📊 Parameter Space Analysis": [
-            "parameter_space_analysis.png",
-            "parameter_analysis.png",
-            "neural_network_demo_visualization.png"
+            str(PLOTS_DIR / "parameter_space_analysis.png"),
+            str(PLOTS_DIR / "parameter_analysis.png"),
+            str(PLOTS_DIR / "neural_network_demo_visualization.png")
         ],
         "✅ Data Verification and Processing": [
-            "verification_plots.png"
+            str(PLOTS_DIR / "verification_plots.png")
         ]
     }
     
@@ -75,13 +81,13 @@ def analyze_experimental_predictions():
     print("EXPERIMENTAL PREDICTIONS DETAILED ANALYSIS")
     print("=" * 80)
     
-    if not os.path.exists('experimental_predictions_fixed.csv'):
+    if not os.path.exists(RESULTS_DIR / 'experimental_predictions_fixed.csv'):
         print("Experimental predictions file not found!")
         return
     
     # Load predictions
-    predictions = pd.read_csv('experimental_predictions_fixed.csv')
-    
+    predictions = pd.read_csv(RESULTS_DIR / 'experimental_predictions_fixed.csv')
+
     print(f"Prediction Statistics:")
     print(f"  Total experimental samples: {len(predictions)}")
     
@@ -161,10 +167,10 @@ def compare_with_simulation_data():
         return
     
     # Load data
-    sim_data = np.load('simulation_processed_with_labels.npz')
+    sim_data = np.load(str(DATA_DIR / 'simulation_processed_with_labels.npz'))
     y_sim = sim_data['y_data']
-    predictions = pd.read_csv('experimental_predictions_fixed.csv')
-    
+    predictions = pd.read_csv(RESULTS_DIR / 'experimental_predictions_fixed.csv')
+
     print(f"Dataset Comparison:")
     print(f"  Simulation samples: {len(y_sim):,}")
     print(f"  Experimental samples: {len(predictions)}")

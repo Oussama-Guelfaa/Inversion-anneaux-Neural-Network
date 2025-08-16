@@ -10,6 +10,12 @@ This script generates a comprehensive summary of all processed data files.
 import numpy as np
 import os
 from datetime import datetime
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+RESULTS_DIR = BASE_DIR / 'results'
+PLOTS_DIR = BASE_DIR / 'plots'
 
 def generate_summary_report():
     """
@@ -31,15 +37,27 @@ def generate_summary_report():
         'detailed_sim_vs_exp_comparison.png': 'Detailed comparison plots',
         'ring_structure_comparison.png': 'Ring structure analysis',
         'parameter_analysis.png': 'Parameter distribution analysis',
-        'verification_plots.png': 'Simulation data verification plots'
+        'verification_plots.png': 'Simulation data verification plots',
+        'experimental_predictions_fixed.csv': 'Experimental predictions',
+        'training_history_fixed.csv': 'Training history CSV'
     }
     
     print("📁 FILE INVENTORY")
     print("-" * 50)
     total_size = 0
     for filename, description in files_to_check.items():
-        if os.path.exists(filename):
-            size_mb = os.path.getsize(filename) / (1024 * 1024)
+        # Resolve path in organized structure
+        if filename.endswith('.npz'):
+            filepath = DATA_DIR / filename
+        elif filename.endswith('.png'):
+            filepath = PLOTS_DIR / filename
+        elif filename.endswith('.csv') or filename.endswith('.txt'):
+            filepath = RESULTS_DIR / filename
+        else:
+            filepath = BASE_DIR / filename
+
+        if os.path.exists(filepath):
+            size_mb = os.path.getsize(filepath) / (1024 * 1024)
             total_size += size_mb
             status = "✓"
             size_str = f"{size_mb:.2f} MB"
@@ -57,7 +75,7 @@ def generate_summary_report():
     print("-" * 50)
     
     if os.path.exists('simulation_processed_truncate250_start.npz'):
-        sim_data = np.load('simulation_processed_truncate250_start.npz')
+        sim_data = np.load(str(DATA_DIR / 'simulation_processed_truncate250_start.npz'))
         sim_X_data = sim_data['X_data']
         sim_x_positions = sim_data['x_positions']
         
@@ -89,7 +107,7 @@ def generate_summary_report():
     print("-" * 50)
     
     if os.path.exists('experimental_processed_interp_to_sim_grid.npz'):
-        exp_data = np.load('experimental_processed_interp_to_sim_grid.npz')
+        exp_data = np.load(str(DATA_DIR / 'experimental_processed_interp_to_sim_grid.npz'))
         exp_X_data = exp_data['X_data']
         exp_x_positions = exp_data['x_positions']
         
@@ -113,7 +131,7 @@ def generate_summary_report():
         print(f"  ✓ Data quality checks passed")
         
         # Check grid alignment with simulation
-        if os.path.exists('simulation_processed_truncate250_start.npz'):
+        if os.path.exists(DATA_DIR / 'simulation_processed_truncate250_start.npz'):
             if np.allclose(exp_x_positions, sim_x_positions[0]):
                 print(f"  ✓ X-axis perfectly aligned with simulation grid")
             else:

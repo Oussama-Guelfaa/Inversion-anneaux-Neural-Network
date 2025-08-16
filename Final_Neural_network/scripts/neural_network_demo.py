@@ -13,6 +13,11 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+PLOTS_DIR = BASE_DIR / 'plots'
 
 def load_complete_dataset():
     """
@@ -21,15 +26,15 @@ def load_complete_dataset():
     Returns:
         tuple: (X_data, y_data, x_positions) - features, targets, and x-axis
     """
-    dataset_file = "simulation_processed_with_labels.npz"
-    
+    dataset_file = DATA_DIR / "simulation_processed_with_labels.npz"
+
     if not os.path.exists(dataset_file):
         print(f"Error: Dataset file not found: {dataset_file}")
         return None, None, None
     
     print(f"Loading complete dataset from: {dataset_file}")
     
-    data = np.load(dataset_file)
+    data = np.load(str(dataset_file))
     X_data = data['X_data']          # Shape: (22540, 750)
     y_data = data['y_data']          # Shape: (22540, 2)
     x_positions = data['x_positions'] # Shape: (22540, 750)
@@ -244,7 +249,7 @@ def create_sample_visualization(X_data, y_data, x_positions):
     plt.tight_layout()
     
     # Save the plot
-    plot_file = "neural_network_demo_visualization.png"
+    plot_file = PLOTS_DIR / "neural_network_demo_visualization.png"
     plt.savefig(plot_file, dpi=150, bbox_inches='tight')
     print(f"Sample visualization saved as: {plot_file}")
     

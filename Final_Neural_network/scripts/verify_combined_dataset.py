@@ -11,6 +11,11 @@ visualizations to understand the parameter distributions.
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+PLOTS_DIR = BASE_DIR / 'plots'
 
 def verify_combined_dataset():
     """
@@ -21,16 +26,16 @@ def verify_combined_dataset():
     print("=" * 70)
     
     # Load the combined dataset
-    combined_file = "simulation_processed_with_labels.npz"
-    
+    combined_file = DATA_DIR / "simulation_processed_with_labels.npz"
+
     if not os.path.exists(combined_file):
         print(f"Error: File not found: {combined_file}")
         return
     
     print(f"Loading combined dataset from: {combined_file}")
     
-    data = np.load(combined_file)
-    
+    data = np.load(str(combined_file))
+
     # Extract arrays
     X_data = data['X_data']
     x_positions = data['x_positions']
@@ -197,7 +202,7 @@ def create_parameter_analysis_plots(X_data, x_positions, y_data):
     plt.tight_layout()
     
     # Save the analysis plot
-    analysis_plot_file = "parameter_analysis.png"
+    analysis_plot_file = PLOTS_DIR / "parameter_analysis.png"
     plt.savefig(analysis_plot_file, dpi=150, bbox_inches='tight')
     print(f"Parameter analysis plot saved as: {analysis_plot_file}")
     

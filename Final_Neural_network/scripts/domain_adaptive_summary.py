@@ -11,6 +11,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+RESULTS_DIR = BASE_DIR / 'results'
+PLOTS_DIR = BASE_DIR / 'plots'
 
 def analyze_training_results():
     """Analyze and summarize the training results."""
@@ -20,10 +26,10 @@ def analyze_training_results():
     
     # Check if files exist
     files_to_check = [
-        'domain_adaptive_model_fixed.pt',
-        'experimental_predictions_fixed.csv',
-        'training_history_fixed.csv',
-        'domain_adaptive_results_fixed.png'
+        str(BASE_DIR / 'models' / 'domain_adaptive_model_fixed.pt'),
+        str(RESULTS_DIR / 'experimental_predictions_fixed.csv'),
+        str(RESULTS_DIR / 'training_history_fixed.csv'),
+        str(PLOTS_DIR / 'domain_adaptive_results_fixed.png')
     ]
     
     print("Generated Files:")
@@ -37,7 +43,7 @@ def analyze_training_results():
     print()
     
     # Analyze training history
-    if os.path.exists('training_history_fixed.csv'):
+    if os.path.exists(RESULTS_DIR / 'training_history_fixed.csv'):
         print("TRAINING ANALYSIS")
         print("-" * 50)
         
@@ -61,7 +67,7 @@ def analyze_training_results():
         print()
     
     # Analyze experimental predictions
-    if os.path.exists('experimental_predictions_fixed.csv'):
+    if os.path.exists(RESULTS_DIR / 'experimental_predictions_fixed.csv'):
         print("EXPERIMENTAL PREDICTIONS ANALYSIS")
         print("-" * 50)
         
@@ -86,7 +92,7 @@ def analyze_training_results():
         print()
     
     # Compare with simulation data
-    if os.path.exists('simulation_processed_with_labels.npz'):
+    if os.path.exists(DATA_DIR / 'simulation_processed_with_labels.npz'):
         print("COMPARISON WITH SIMULATION DATA")
         print("-" * 50)
         
@@ -103,8 +109,8 @@ def analyze_training_results():
         print(f"    Mean: {y_sim[:, 1].mean():.3f} ± {y_sim[:, 1].std():.3f} µm")
         
         if os.path.exists('experimental_predictions_fixed.csv'):
-            predictions = pd.read_csv('experimental_predictions_fixed.csv')
-            
+            predictions = pd.read_csv(RESULTS_DIR / 'experimental_predictions_fixed.csv')
+
             print(f"\nExperimental vs Simulation Comparison:")
             
             # Check if experimental predictions fall within simulation range
@@ -133,13 +139,13 @@ def create_summary_visualization():
     print("-" * 50)
     
     # Load data
-    if not all(os.path.exists(f) for f in ['training_history_fixed.csv', 'experimental_predictions_fixed.csv']):
+    if not all(os.path.exists(p) for p in [RESULTS_DIR / 'training_history_fixed.csv', RESULTS_DIR / 'experimental_predictions_fixed.csv']):
         print("Required files not found for visualization")
         return
     
-    history = pd.read_csv('training_history_fixed.csv')
-    predictions = pd.read_csv('experimental_predictions_fixed.csv')
-    sim_data = np.load('simulation_processed_with_labels.npz')
+    history = pd.read_csv(RESULTS_DIR / 'training_history_fixed.csv')
+    predictions = pd.read_csv(RESULTS_DIR / 'experimental_predictions_fixed.csv')
+    sim_data = np.load(str(DATA_DIR / 'simulation_processed_with_labels.npz'))
     y_sim = sim_data['y_data']
     
     # Create comprehensive summary plot
@@ -223,7 +229,7 @@ def create_summary_visualization():
     
     # Save the summary plot
     summary_plot_path = 'domain_adaptive_comprehensive_summary.png'
-    plt.savefig(summary_plot_path, dpi=150, bbox_inches='tight')
+    plt.savefig(str(PLOTS_DIR / summary_plot_path), dpi=150, bbox_inches='tight')
     print(f"✓ Summary visualization saved to: {summary_plot_path}")
     
     plt.close()
@@ -251,8 +257,8 @@ def generate_final_report():
         "TRAINING RESULTS:",
     ]
     
-    if os.path.exists('training_history_fixed.csv'):
-        history = pd.read_csv('training_history_fixed.csv')
+    if os.path.exists(RESULTS_DIR / 'training_history_fixed.csv'):
+        history = pd.read_csv(RESULTS_DIR / 'training_history_fixed.csv')
         report_lines.extend([
             f"- Training completed in {len(history)} epochs (early stopping)",
             f"- Final validation loss: {history['val_loss'].iloc[-1]:.6f}",
@@ -260,8 +266,8 @@ def generate_final_report():
             f"- Model parameters: ~3.1M",
         ])
     
-    if os.path.exists('experimental_predictions_fixed.csv'):
-        predictions = pd.read_csv('experimental_predictions_fixed.csv')
+    if os.path.exists(RESULTS_DIR / 'experimental_predictions_fixed.csv'):
+        predictions = pd.read_csv(RESULTS_DIR / 'experimental_predictions_fixed.csv')
         report_lines.extend([
             "",
             "EXPERIMENTAL PREDICTIONS:",
@@ -296,7 +302,7 @@ def generate_final_report():
         print(line)
     
     # Save report to file
-    with open('domain_adaptive_final_report.txt', 'w') as f:
+    with open(RESULTS_DIR / 'domain_adaptive_final_report.txt', 'w') as f:
         f.write('\n'.join(report_lines))
     
     print("✓ Final report saved to: domain_adaptive_final_report.txt")

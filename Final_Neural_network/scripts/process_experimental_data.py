@@ -21,6 +21,13 @@ import scipy.io as sio
 import matplotlib.pyplot as plt
 import os
 import sys
+from pathlib import Path
+
+# Paths
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+PLOTS_DIR = BASE_DIR / 'plots'
+PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
 def load_experimental_data():
     """
@@ -68,8 +75,8 @@ def load_simulation_grid():
     Returns:
         numpy.ndarray: x_positions[0] - simulation x-grid in micrometers
     """
-    sim_file = "simulation_processed_truncate250_start.npz"
-    
+    sim_file = str(DATA_DIR / "simulation_processed_truncate250_start.npz")
+
     if not os.path.exists(sim_file):
         print(f"Error: Simulation file not found: {sim_file}")
         sys.exit(1)
@@ -151,8 +158,8 @@ def save_processed_experimental_data(X_data, x_clipped):
         X_data (numpy.ndarray): Interpolated experimental profiles
         x_clipped (numpy.ndarray): Clipped simulation x-grid
     """
-    output_file = "experimental_processed_interp_to_sim_grid.npz"
-    
+    output_file = str(DATA_DIR / "experimental_processed_interp_to_sim_grid.npz")
+
     try:
         # Convert to float32 to reduce file size
         X_data_f32 = X_data.astype(np.float32)
@@ -186,12 +193,12 @@ def create_comparison_plot():
     print("Creating comparison visualization...")
     
     # Load simulation data
-    sim_data = np.load("simulation_processed_truncate250_start.npz")
+    sim_data = np.load(str(DATA_DIR / "simulation_processed_truncate250_start.npz"))
     sim_X_data = sim_data['X_data']
     sim_x_positions = sim_data['x_positions'][0]  # All profiles use same x-grid
     
     # Load experimental data
-    exp_data = np.load("experimental_processed_interp_to_sim_grid.npz")
+    exp_data = np.load(str(DATA_DIR / "experimental_processed_interp_to_sim_grid.npz"))
     exp_X_data = exp_data['X_data']
     exp_x_positions = exp_data['x_positions']
     
@@ -230,7 +237,7 @@ def create_comparison_plot():
     plt.tight_layout()
     
     # Save plot
-    plot_file = "sim_vs_exp_profiles.png"
+    plot_file = str(PLOTS_DIR / "sim_vs_exp_profiles.png")
     plt.savefig(plot_file, dpi=150, bbox_inches='tight')
     print(f"Comparison plot saved as: {plot_file}")
     

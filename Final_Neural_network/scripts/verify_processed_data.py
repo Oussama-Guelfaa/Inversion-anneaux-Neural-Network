@@ -10,13 +10,18 @@ This script loads and verifies the processed simulation data from the .npz file.
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+PLOTS_DIR = BASE_DIR / 'plots'
 
 def verify_processed_data():
     """
     Load and verify the processed simulation data.
     """
-    npz_file = "simulation_processed_truncate250_start.npz"
-    
+    npz_file = DATA_DIR / "simulation_processed_truncate250_start.npz"
+
     if not os.path.exists(npz_file):
         print(f"Error: File not found: {npz_file}")
         return
@@ -26,8 +31,8 @@ def verify_processed_data():
     print("=" * 60)
     
     # Load the data
-    data = np.load(npz_file)
-    
+    data = np.load(str(npz_file))
+
     print("Available arrays in the file:")
     for key in data.keys():
         print(f"  {key}: {data[key].shape}")
@@ -91,7 +96,7 @@ def verify_processed_data():
     plt.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig('verification_plots.png', dpi=150, bbox_inches='tight')
+    plt.savefig(PLOTS_DIR / 'verification_plots.png', dpi=150, bbox_inches='tight')
     print("Sample plots saved as 'verification_plots.png'")
     
     print("=" * 60)

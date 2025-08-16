@@ -13,23 +13,32 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.spatial.distance import cdist
 import os
+from pathlib import Path
+
+# Paths
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+RESULTS_DIR = BASE_DIR / 'results'
+PLOTS_DIR = BASE_DIR / 'plots'
+PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def load_all_data():
     """Load experimental data, predictions, and simulation data."""
     print("Loading all datasets...")
     
     # Load experimental predictions
-    predictions = pd.read_csv('experimental_predictions_fixed.csv')
+    predictions = pd.read_csv(RESULTS_DIR / 'experimental_predictions_fixed.csv')
     print(f"Loaded {len(predictions)} experimental predictions")
     
     # Load experimental profiles
-    exp_data = np.load('experimental_processed_interp_to_sim_grid.npz')
+    exp_data = np.load(str(DATA_DIR / 'experimental_processed_interp_to_sim_grid.npz'))
     X_exp = exp_data['X_data']  # (50, 750)
     x_exp = exp_data['x_positions']  # (750,)
     print(f"Loaded experimental profiles: {X_exp.shape}")
     
     # Load simulation data with labels
-    sim_data = np.load('simulation_processed_with_labels.npz')
+    sim_data = np.load(str(DATA_DIR / 'simulation_processed_with_labels.npz'))
     X_sim = sim_data['X_data']  # (22540, 750)
     y_sim = sim_data['y_data']  # (22540, 2) - [gap_um, L_um]
     x_sim = sim_data['x_positions'][0]  # (750,) - all profiles use same x-axis
@@ -155,7 +164,7 @@ def create_comparison_plots(data, closest_matches, n_samples=12):
     plt.tight_layout()
     
     # Save the plot
-    plot_path = 'experimental_vs_closest_simulation_profiles.png'
+    plot_path = PLOTS_DIR / 'experimental_vs_closest_simulation_profiles.png'
     plt.savefig(plot_path, dpi=150, bbox_inches='tight')
     print(f"✓ Comparison plot saved to: {plot_path}")
     
@@ -229,7 +238,7 @@ def create_parameter_space_visualization(data, closest_matches):
     plt.tight_layout()
     
     # Save the plot
-    param_plot_path = 'parameter_space_analysis.png'
+    param_plot_path = PLOTS_DIR / 'parameter_space_analysis.png'
     plt.savefig(param_plot_path, dpi=150, bbox_inches='tight')
     print(f"✓ Parameter space plot saved to: {param_plot_path}")
     
@@ -303,7 +312,7 @@ def create_detailed_profile_comparison(data, closest_matches, sample_indices=[0,
     plt.tight_layout()
     
     # Save the detailed plot
-    detailed_plot_path = 'detailed_experimental_vs_simulation_comparison.png'
+    detailed_plot_path = PLOTS_DIR / 'detailed_experimental_vs_simulation_comparison.png'
     plt.savefig(detailed_plot_path, dpi=150, bbox_inches='tight')
     print(f"✓ Detailed comparison plot saved to: {detailed_plot_path}")
     

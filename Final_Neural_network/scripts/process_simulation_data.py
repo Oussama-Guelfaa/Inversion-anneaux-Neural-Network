@@ -15,6 +15,10 @@ import numpy as np
 import scipy.io as sio
 import os
 import sys
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
 
 def load_and_process_simulation_data():
     """
@@ -25,7 +29,7 @@ def load_and_process_simulation_data():
     """
     # Define input file path
     input_file = "../Neural_Network_Gap_Lecran_Prediction/data/raw/Train/all_banque_new_04_07_25_NEW_full.mat"
-    
+
     # Check if input file exists
     if not os.path.exists(input_file):
         print(f"Error: Input file not found: {input_file}")
@@ -116,8 +120,8 @@ def save_processed_data(X_data, x_positions, output_file):
     """
     try:
         # Save to compressed .npz file
-        np.savez_compressed(output_file, 
-                          X_data=X_data, 
+        np.savez_compressed(str(output_file),
+                          X_data=X_data,
                           x_positions=x_positions)
         
         print(f"Data saved successfully to: {output_file}")
@@ -148,8 +152,8 @@ def main():
     X_data, x_positions = load_and_process_simulation_data()
     
     # Define output file
-    output_file = "simulation_processed_truncate250_start.npz"
-    
+    output_file = DATA_DIR / "simulation_processed_truncate250_start.npz"
+
     # Save processed data
     save_processed_data(X_data, x_positions, output_file)
     

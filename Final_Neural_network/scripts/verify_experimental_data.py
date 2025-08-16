@@ -10,6 +10,11 @@ This script verifies the processed experimental data and provides detailed analy
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+PLOTS_DIR = BASE_DIR / 'plots'
 
 def verify_experimental_processing():
     """
@@ -20,22 +25,22 @@ def verify_experimental_processing():
     print("=" * 70)
     
     # Load experimental data
-    exp_file = "experimental_processed_interp_to_sim_grid.npz"
+    exp_file = DATA_DIR / "experimental_processed_interp_to_sim_grid.npz"
     if not os.path.exists(exp_file):
         print(f"Error: File not found: {exp_file}")
         return
     
-    exp_data = np.load(exp_file)
+    exp_data = np.load(str(exp_file))
     exp_X_data = exp_data['X_data']
     exp_x_positions = exp_data['x_positions']
     
     # Load simulation data for comparison
-    sim_file = "simulation_processed_truncate250_start.npz"
+    sim_file = DATA_DIR / "simulation_processed_truncate250_start.npz"
     if not os.path.exists(sim_file):
         print(f"Error: File not found: {sim_file}")
         return
     
-    sim_data = np.load(sim_file)
+    sim_data = np.load(str(sim_file))
     sim_X_data = sim_data['X_data']
     sim_x_positions = sim_data['x_positions'][0]  # All profiles use same x-grid
     
@@ -167,7 +172,7 @@ def create_detailed_comparison_plots(exp_X_data, exp_x_positions, sim_X_data, si
     plt.tight_layout()
     
     # Save the detailed comparison
-    detailed_plot_file = "detailed_sim_vs_exp_comparison.png"
+    detailed_plot_file = PLOTS_DIR / "detailed_sim_vs_exp_comparison.png"
     plt.savefig(detailed_plot_file, dpi=150, bbox_inches='tight')
     print(f"Detailed comparison plot saved as: {detailed_plot_file}")
     
@@ -215,7 +220,7 @@ def create_ring_structure_comparison(exp_X_data, exp_x_positions, sim_X_data, si
     plt.tight_layout()
     
     # Save the ring structure comparison
-    ring_plot_file = "ring_structure_comparison.png"
+    ring_plot_file = PLOTS_DIR / "ring_structure_comparison.png"
     plt.savefig(ring_plot_file, dpi=150, bbox_inches='tight')
     print(f"Ring structure comparison saved as: {ring_plot_file}")
     
