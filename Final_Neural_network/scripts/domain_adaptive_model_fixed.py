@@ -19,8 +19,19 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 import os
+from pathlib import Path
 import warnings
 warnings.filterwarnings('ignore')
+
+# Paths
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / 'data' / 'processed'
+PLOTS_DIR = BASE_DIR / 'plots'
+MODELS_DIR = BASE_DIR / 'models'
+RESULTS_DIR = BASE_DIR / 'results'
+PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+MODELS_DIR.mkdir(parents=True, exist_ok=True)
+RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Set device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -105,12 +116,12 @@ def load_and_preprocess_data():
     print("Loading and preprocessing data...")
     
     # Load simulation data
-    sim_data = np.load('simulation_processed_with_labels.npz')
+    sim_data = np.load(str(DATA_DIR / 'simulation_processed_with_labels.npz'))
     X_sim = sim_data['X_data'].astype(np.float32)
     y_sim = sim_data['y_data'].astype(np.float32)
     
     # Load experimental data
-    exp_data = np.load('experimental_processed_interp_to_sim_grid.npz')
+    exp_data = np.load(str(DATA_DIR / 'experimental_processed_interp_to_sim_grid.npz'))
     X_exp = exp_data['X_data'].astype(np.float32)
     
     print(f"Data loaded: X_sim {X_sim.shape}, y_sim {y_sim.shape}, X_exp {X_exp.shape}")
@@ -343,7 +354,7 @@ def save_results_and_visualize(model, history, evaluation_results, data_dict):
         'model_state_dict': model.state_dict(),
         'X_scaler': data_dict['X_scaler'],
         'y_scaler': data_dict['y_scaler']
-    }, 'domain_adaptive_model_fixed.pt')
+    }, str(MODELS_DIR / 'domain_adaptive_model_fixed.pt'))
 
     # Save experimental predictions
     exp_predictions = evaluation_results['exp_predictions']
@@ -352,11 +363,11 @@ def save_results_and_visualize(model, history, evaluation_results, data_dict):
         'predicted_gap_um': exp_predictions[:, 0],
         'predicted_L_um': exp_predictions[:, 1]
     })
-    predictions_df.to_csv('experimental_predictions_fixed.csv', index=False)
+    predictions_df.to_csv(str(RESULTS_DIR / 'experimental_predictions_fixed.csv'), index=False)
 
     # Save training history
     history_df = pd.DataFrame(history)
-    history_df.to_csv('training_history_fixed.csv', index=False)
+    history_df.to_csv(str(RESULTS_DIR / 'training_history_fixed.csv'), index=False)
 
     # Create visualizations
     fig, axes = plt.subplots(2, 2, figsize=(15, 12))
@@ -404,7 +415,7 @@ def save_results_and_visualize(model, history, evaluation_results, data_dict):
                alpha=0.8, s=50, color='red', label='Experimental')
 
     # Load original simulation data for comparison
-    sim_data = np.load('simulation_processed_with_labels.npz')
+    sim_data = np.load(str(DATA_DIR / 'simulation_processed_with_labels.npz'))
     y_sim_orig = sim_data['y_data']
     ax4.scatter(y_sim_orig[::100, 0], y_sim_orig[::100, 1],
                alpha=0.3, s=1, color='blue', label='Simulation (subset)')
@@ -416,7 +427,7 @@ def save_results_and_visualize(model, history, evaluation_results, data_dict):
     ax4.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    plt.savefig('domain_adaptive_results_fixed.png', dpi=150, bbox_inches='tight')
+    plt.savefig(str(PLOTS_DIR / 'domain_adaptive_results_fixed.png'), dpi=150, bbox_inches='tight')
     plt.close()
 
     print("✓ Results saved successfully!")
